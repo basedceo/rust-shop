@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Product Creation Page</title>
+    <!-- <link href="css/style.css" rel="stylesheet"> -->
+  </head>
+  <body>
+    <ul>
+      <form action="/create_product" method="post">
+        <li>
+          <label for="title"></label>
+          Enter the name of your Product:
+          <input type="text" name="title" value="product name">
+        </li>
+
+        <li>
+          <label for="description"></label>
+          Enter a short description of your product:
+          <input type="text" name="description" value="product description">
+        </li>
+
+        <li>
+          <label for="category">Select a category for your product</label>
+          <select id="category" name="category">
+            <option value="computers">computers</option>
+            <option value="routers">routers</option>
+            <option value="digital storage">digital storage</option>
+            <option value="phone cases">phone cases</option>
+            <option value="t shirts">t shirts</option>
+            <option value="hats">hats</option>
+          </select>
+        </li>
+
+        <li>
+          <label for="price">Enter the price you'll charge for your product</label>
+          <input type="text" name="price" value="0.00">
+        </li>
+
+        <li>
+          <label for="sku"></label>
+          Enter the SKU of your product
+          <input type="text" name="sku" value="000000">
+        </li>
+
+        <li>
+          <label for="product_type"></label>
+          What kind of Product are you selling?
+          <select id="product_type" name="product_type">
+            <option value="physical">physical</option>
+            <option value="digital">digital</option>
+          </select>
+        </li>
+
+        <li>
+          <label for="stock"></label>
+          Enter the initial stock quantity of your product
+          <input type="text" name="stock" value="000000">
+        </li>
+
+        <li>
+          <label for="allow_backorders"></label>
+          Do you want to allow back orders for your product?
+          <select id="allow_backorders" name="allow_backorders">
+            <option value="yes">yes</option>
+            <option value="no">no</option>
+          </select>
+        </li>
+
+        <li>
+          <label for="low_stock_threshold"></label>
+          Enter the quantity for low stock warning
+          <input type="text" name="low_stock_threshold" value="5">
+        </li>
+
+        <li>
+          <label for="shipping_weight"></label>
+          Enter the approximate weight of your product in kg calculate shipping costs
+          <input type="text" name="shipping_weight" value="5">
+        </li>
+        <li>
+          <label for="product_gallery"></label>
+          <input type="file" name="product_gallery" value="product_gallery">
+        </li>
+        <li>
+          <label for="attributes"></label>
+          Enter the attributes for your product seperated by commas
+          <input type="text" name="attributes" value="attributes">
+        </li>
+
+        <li>
+          <label for="variations"></label>
+          Select a variation for your product
+          <input type="text" name="variations" value="FIX WITH ASKAMA">
+        </li>
+
+        <li>
+          <label for="shipping_dimensions"></label>
+          Enter the size of your product when in box ready to ship
+          <input type="text" name="shipping_dimensions" value="shipping_dimensions">
+        </li>
+
+        <li>
+          <label for="shipping_class"></label>
+          Enter the shipping class for your product
+          <select id="shipping_class" name="shipping_class">
+            <option value="2 week free shipping">2 week free shipping</option>
+            <option value="1 week free shipping">1 week free shipping</option>
+          </select>
+        </li>
+
+        <li>
+          <label for="tax_status"></label>
+          Enter the tax percentage for your product
+          <input type="text" name="tax_status" value="tax_status">
+        </li>
+
+        <li>
+          <label for="tax_class"></label>
+          Enter the tax class for your product
+          <input type="text" name="tax_class" value="tax_class">
+        </li>
+        
+        <input type="submit" value="Create Product">
+
+      </form>
+    </ul>
+  
+  </body>
+</html>

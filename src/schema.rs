@@ -1,0 +1,54 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Debug, Default)]
+pub struct FilterOptions {
+    pub page: Option<usize>,
+    pub limit: Option<usize>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ParamOptions {
+    pub id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CreateNoteSchema {
+    pub title: String,
+    pub content: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub published: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct UpdateNoteSchema {
+    pub title: Option<String>,
+    pub content: Option<String>,
+    pub category: Option<String>,
+    pub published: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CreateProductSchema {
+    pub title: String,
+    pub description: String,
+    pub category: String,
+    pub price: String,
+    pub sku: String,
+    pub product_type: String,
+    pub stock: String,
+    pub allow_backorders: String,
+    pub low_stock_threshold: String,
+    pub shipping_weight: String,
+    pub product_gallery: String,
+    pub attributes: String,
+    pub variations: String,
+    pub shipping_dimensions: String,
+    pub shipping_class: String,
+    //this is optional
+    pub tax_status: String,
+    pub tax_class: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub published: Option<bool>,
+}

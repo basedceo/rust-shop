@@ -1,0 +1,3 @@
+after modifying the database run
+sqlx database drop
+sqlx database setup
