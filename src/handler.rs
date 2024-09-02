@@ -1,4 +1,6 @@
 use std::sync::Arc;
+use tera::Tera;
+use tera::Context;
 
 use axum::{
     extract::{Path, Query, State, Form},
@@ -65,9 +67,6 @@ pub async fn product_list_handler(
 }
 
 
-
-
-
 pub async fn note_list_handler(
     //optional parameter to filter results when querying larger databases
     opts: Option<Query<FilterOptions>>,
@@ -102,6 +101,28 @@ pub async fn note_list_handler(
         "results": notes.len(),
         "notes": notes
     });
+    println!("notes are {:?}", notes);
+    //for i in  notes {
+    //    //println!("***{:?}", i);
+    //    //print_type_of(&i);
+    //    println!("content = {:?}", i.content);
+    //    print_type_of(&i.content);
+    //}
+    
+    //TODO
+    //create a seperate function to display the templated HTML, download tests to verify how those
+    //functions should work
+    let mut tera = Tera::new("templates/**/*").unwrap();
+    let mut context = Context::new();
+    for note in  notes {
+        context.insert("note.title", &note.title);
+        context.insert("note.category", &note.category);
+        context.insert("note.content", &note.content);
+
+        let output = tera.render("hello.html", &context);
+        Html(output.unwrap());
+    }
+
     Ok(Json(json_response))
 }
 
@@ -278,6 +299,12 @@ pub struct Input {
     category: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     published: Option<bool>,
+}
+
+//display submitted form in HTML with tera
+pub async fn display_form() {
+    let mut tera = Tera::new("templates/**/*").unwrap();
+    let mut context = Context::new();
 }
 
 //this functions like create_note_handler but with an html form
