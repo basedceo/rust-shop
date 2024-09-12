@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File Upload Test</title>
+  </head>
+  <body>
+    <ul>
+      <!--multipart/form-data is needed for this to work-->
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <li>
+          <label for="product_gallery"></label>
+          <input type="file" name="product_gallery" value="product_gallery">
+        </li>
+        <input type="submit" value="Create Product">
+      </form>
+    </ul>
+  </body>
+</html>

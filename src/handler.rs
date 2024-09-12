@@ -1,9 +1,11 @@
 use std::sync::Arc;
-use tera::Tera;
+use tera::{to_value, Tera};
+use lazy_static::lazy_static;
 use tera::Context;
+use tokio::fs;
 
 use axum::{
-    extract::{Path, Query, State, Form},
+    extract::{multipart, Form, Multipart, Path, Query, State},
     http::StatusCode,
     response::{Html, IntoResponse},
     Json,
@@ -26,6 +28,99 @@ pub async fn health_checker_handler() -> impl IntoResponse {
     });
 
     Json(json_response)
+}
+
+//File upload
+pub async fn file_upload_handler(mut multipart: Multipart) {
+    println!("running file_upload_handler");
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        let name = field.name().unwrap().to_string();
+        //new var
+        let file_name = field.file_name().unwrap().to_string();
+        //new var
+        let content_type = field.content_type().unwrap().to_string();
+
+        //TODO this dosn't work with the following file extensions
+        //.svg .xcf, .txt, 
+        //these image extensions work
+        //.jpg, .png, .avif, .webp
+        //gets the file extension
+        let Some(file_type) = content_type.split('/').nth(1) else {
+            //TODO handle this better, most likely by rejecting the upload
+            //and asking the user to try again
+            panic!("that didn't work");
+        };
+        println!("filetype is {}", file_type);
+
+        //raw bytes of our upload
+        let data = field.bytes().await.unwrap();
+
+        println!(
+            "Length of `{name}` (`{file_name}`: `{content_type}`) is {} bytes",
+            data.len()
+        );
+
+        //writes the file to the /uploaded/ directory
+        let path = format!("/home/kenny/code/Rust/rust-axum-postgres-api/uploads/{}", file_name);
+        fs::write(path, data).await;
+    }
+}
+
+pub async fn get_file_upload() -> Html<&'static str> {
+    Html(std::include_str!("../file_upload_form.html"))
+}
+
+///***TERA TEMPLATING START***
+fn common_context() -> tera::Context {
+    let mut context = tera::Context::new();
+    context.insert("title", "axum-tera");
+    context
+}
+
+pub async fn tera_product_handler(
+    opts: Option<Query<FilterOptions>>,
+    State(data): State<Arc<AppState>>,
+) -> Html<String> {
+    let Query(opts) = opts.unwrap_or_default();
+
+    let limit = opts.limit.unwrap_or(10);
+    let offset = (opts.page.unwrap_or(1) - 1) * limit;
+
+    let query_result = sqlx::query_as!(
+        ProductModel,
+        "SELECT * FROM products ORDER by id LIMIT $1 OFFSET $2",
+        limit as i32,
+        offset as i32
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if query_result.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all note items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let products = query_result.unwrap();
+
+    let json_response = serde_json::json!({
+        "status": "success",
+        "results": products.len(),
+        "products": products
+    });
+
+    //tera
+    let tera = Tera::new("frontend/**/*").unwrap();
+    let mut context = common_context();
+
+    context.insert("page_title", "Index");
+    context.insert("message", "This is Index page.");
+    context.insert("products", &products);
+    let output = tera.render("index.html", &context);
+    Html(output.unwrap())
 }
 
 
@@ -63,9 +158,19 @@ pub async fn product_list_handler(
         "results": products.len(),
         "products": products
     });
+
+    println!("products are {:?}", products);
+    for i in  products {
+      //println!("***{:?}", i);
+      //print_type_of(&i);
+        println!("content = {:?}", i);
+        println!("id is {:?}", i.id);
+        println!("category is {:?}", i.category);
+        print_type_of(&i);
+    }
+
     Ok(Json(json_response))
 }
-
 
 pub async fn note_list_handler(
     //optional parameter to filter results when querying larger databases
@@ -101,28 +206,7 @@ pub async fn note_list_handler(
         "results": notes.len(),
         "notes": notes
     });
-    println!("notes are {:?}", notes);
-    //for i in  notes {
-    //    //println!("***{:?}", i);
-    //    //print_type_of(&i);
-    //    println!("content = {:?}", i.content);
-    //    print_type_of(&i.content);
-    //}
     
-    //TODO
-    //create a seperate function to display the templated HTML, download tests to verify how those
-    //functions should work
-    let mut tera = Tera::new("templates/**/*").unwrap();
-    let mut context = Context::new();
-    for note in  notes {
-        context.insert("note.title", &note.title);
-        context.insert("note.category", &note.category);
-        context.insert("note.content", &note.content);
-
-        let output = tera.render("hello.html", &context);
-        Html(output.unwrap());
-    }
-
     Ok(Json(json_response))
 }
 
