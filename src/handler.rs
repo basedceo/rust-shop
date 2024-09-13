@@ -197,6 +197,52 @@ pub struct Input {
     published: Option<bool>,
 }
 
+//TODO get a function working that can accept product parameters and images
+//pub async fn multipart_create_product_handler(
+//    State(data): State<Arc<AppState>>,
+//    mut multipart(body): Multipart<CreateProductSchema>,
+//) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+//    let query_result = sqlx::query_as!(
+//        ProductModel,
+//        "INSERT INTO products (
+//        title,
+//        description,
+//        category,
+//        price,
+//        sku,
+//        product_type,
+//        stock,
+//        allow_backorders,
+//        low_stock_threshold,
+//        shipping_weight,
+//        product_gallery,
+//        attributes,
+//        variations,
+//        shipping_dimensions,
+//        shipping_class,
+//        tax_status,
+//        tax_class) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING *",
+//        body.title.to_string(),
+//        body.description.to_string(),
+//        body.category.to_string(),
+//        body.price.to_string(),
+//        body.sku.to_string(),
+//        body.product_type.to_string(),
+//        body.stock.to_string(),
+//        body.allow_backorders.to_string(),
+//        body.low_stock_threshold.to_string(),
+//        body.shipping_weight.to_string(),
+//        body.product_gallery.to_string(),
+//        body.attributes.to_string(),
+//        body.variations.to_string(),
+//        body.shipping_dimensions.to_string(),
+//        body.shipping_class.to_string(),
+//        body.tax_status.to_string(),
+//        body.tax_class.to_string()
+//        //body.tax_class.to_owned().unwrap_or("".to_string()),
+//    )
+//
+//}
 
 pub async fn create_product_handler(
     State(data): State<Arc<AppState>>,
