@@ -77,6 +77,7 @@ fn common_context() -> tera::Context {
     context
 }
 
+//Displays products with tera templates at 127.0.0.1:8000/products
 pub async fn tera_product_handler(
     opts: Option<Query<FilterOptions>>,
     State(data): State<Arc<AppState>>,
@@ -113,17 +114,20 @@ pub async fn tera_product_handler(
     });
 
     //tera
-    let tera = Tera::new("frontend/**/*").unwrap();
+    let tera = Tera::new("frontend/**/*.html").unwrap();
+    let image_urls = vec!["frontend/img/logo_small.webp", "frontend/img/button.png", "frontend/img/CODTMT0008-B.webp"];
     let mut context = common_context();
 
     context.insert("page_title", "Index");
     context.insert("message", "This is Index page.");
     context.insert("products", &products);
+    context.insert("images", &image_urls);
     let output = tera.render("index.html", &context);
     Html(output.unwrap())
 }
 
 
+//This function might be unnecessary
 pub async fn product_list_handler(
     //optional parameter to filter results when querying larger databases
     opts: Option<Query<FilterOptions>>,
@@ -197,10 +201,123 @@ pub struct Input {
     published: Option<bool>,
 }
 
-//TODO get a function working that can accept product parameters and images
-//pub async fn multipart_create_product_handler(
+////TODO get a function working that can accept product parameters and images
+///Some of this was written by ChatGPT
+///creates products
+pub async fn multipart_create_product_handler(
+    State(data): State<Arc<AppState>>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    let mut text_inputs = vec![String::new(); 17]; // Store text inputs
+
+    let field_mapping = [
+        "title", "description", "category", "price", "sku", "product_type", "stock",
+        "allow_backorders", "low_stock_threshold", "shipping_weight", "product_gallery", "attributes",
+        "variations", "shipping_dimensions", "shipping_class", "tax_status", "tax_class"
+    ];
+
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        if let Some(field_name) = field.name() {
+            print!("{:?} = ", field_name);
+            //TODO refactor this so that the product_gallery case is handled first and its related
+            //text_inputs[index] is equal to the file path after the image is uploaded
+            //if let Some(index) = field_mapping.iter().position(|&name| name == field_name) {
+            if field_name == "product_gallery" {
+                // File upload handling
+                let file_name = field.file_name().unwrap().to_string();
+                let content_type = field.content_type().unwrap().to_string();
+                let data = field.bytes().await.unwrap();
+
+                let Some(file_type) = content_type.split('/').nth(1) else {
+                    return Err((StatusCode::BAD_REQUEST, Json(json!({"error": "Invalid file type"}))));
+                };
+
+                //let upload_path = format!("/home/kenny/code/Rust/rust-axum-postgres-api/uploads/{}", file_name);
+                let upload_path = format!("/home/kenny/code/Rust/rust-axum-postgres-api/frontend/img/{}", file_name);
+                println!("Uploading file to {:?}", upload_path);
+                fs::write(&upload_path, data).await.unwrap();
+                text_inputs[10] = upload_path;
+            } else if let Some(index) = field_mapping.iter().position(|&name| name == field_name) {
+                text_inputs[index] = field.text().await.unwrap();
+                //println!("{:?} is {:?}", field_name, text_inputs[index]);
+                println!("{:?}", text_inputs[index]);
+            } 
+        }
+    }
+
+    let query_result = sqlx::query_as!(
+        ProductModel,
+        "INSERT INTO products (
+        title,
+        description,
+        category,
+        price,
+        sku,
+        product_type,
+        stock,
+        allow_backorders,
+        low_stock_threshold,
+        shipping_weight,
+        product_gallery,
+        attributes,
+        variations,
+        shipping_dimensions,
+        shipping_class,
+        tax_status,
+        tax_class) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING *",
+        text_inputs[0],
+        text_inputs[1],
+        text_inputs[2],
+        text_inputs[3],
+        text_inputs[4],
+        text_inputs[5],
+        text_inputs[6],
+        text_inputs[7],
+        text_inputs[8],
+        text_inputs[9],
+        text_inputs[10],
+        text_inputs[11],
+        text_inputs[12],
+        text_inputs[13],
+        text_inputs[14],
+        text_inputs[15],
+        text_inputs[16]
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    match query_result {
+        Ok(note) => {
+            let note_response = json!({"status": "success","data": json!({
+                "note": note
+            })});
+
+            return Ok((StatusCode::CREATED, Json(note_response)));
+        }
+        Err(e) => {
+            if e.to_string()
+                .contains("duplicate key value violates unique constraint")
+            {
+                let error_response = serde_json::json!({
+                    "status": "fail",
+                    "message": "Product with that name already exists",
+                });
+                return Err((StatusCode::CONFLICT, Json(error_response)));
+            }
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({"status": "error","message": format!("{:?}", e)})),
+            ));
+        }
+    }
+    // Process `text_inputs` as necessary
+    
+    //Ok(())
+}
+
+//pub async fn create_product_handler(
 //    State(data): State<Arc<AppState>>,
-//    mut multipart(body): Multipart<CreateProductSchema>,
+//    Form(body): Form<CreateProductSchema>,
 //) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
 //    let query_result = sqlx::query_as!(
 //        ProductModel,
@@ -241,77 +358,31 @@ pub struct Input {
 //        body.tax_class.to_string()
 //        //body.tax_class.to_owned().unwrap_or("".to_string()),
 //    )
+//    .fetch_one(&data.db)
+//    .await;
 //
+//    match query_result {
+//        Ok(note) => {
+//            let note_response = json!({"status": "success","data": json!({
+//                "note": note
+//            })});
+//
+//            return Ok((StatusCode::CREATED, Json(note_response)));
+//        }
+//        Err(e) => {
+//            if e.to_string()
+//                .contains("duplicate key value violates unique constraint")
+//            {
+//                let error_response = serde_json::json!({
+//                    "status": "fail",
+//                    "message": "Product with that name already exists",
+//                });
+//                return Err((StatusCode::CONFLICT, Json(error_response)));
+//            }
+//            return Err((
+//                StatusCode::INTERNAL_SERVER_ERROR,
+//                Json(json!({"status": "error","message": format!("{:?}", e)})),
+//            ));
+//        }
+//    }
 //}
-
-pub async fn create_product_handler(
-    State(data): State<Arc<AppState>>,
-    Form(body): Form<CreateProductSchema>,
-) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let query_result = sqlx::query_as!(
-        ProductModel,
-        "INSERT INTO products (
-        title,
-        description,
-        category,
-        price,
-        sku,
-        product_type,
-        stock,
-        allow_backorders,
-        low_stock_threshold,
-        shipping_weight,
-        product_gallery,
-        attributes,
-        variations,
-        shipping_dimensions,
-        shipping_class,
-        tax_status,
-        tax_class) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING *",
-        body.title.to_string(),
-        body.description.to_string(),
-        body.category.to_string(),
-        body.price.to_string(),
-        body.sku.to_string(),
-        body.product_type.to_string(),
-        body.stock.to_string(),
-        body.allow_backorders.to_string(),
-        body.low_stock_threshold.to_string(),
-        body.shipping_weight.to_string(),
-        body.product_gallery.to_string(),
-        body.attributes.to_string(),
-        body.variations.to_string(),
-        body.shipping_dimensions.to_string(),
-        body.shipping_class.to_string(),
-        body.tax_status.to_string(),
-        body.tax_class.to_string()
-        //body.tax_class.to_owned().unwrap_or("".to_string()),
-    )
-    .fetch_one(&data.db)
-    .await;
-
-    match query_result {
-        Ok(note) => {
-            let note_response = json!({"status": "success","data": json!({
-                "note": note
-            })});
-
-            return Ok((StatusCode::CREATED, Json(note_response)));
-        }
-        Err(e) => {
-            if e.to_string()
-                .contains("duplicate key value violates unique constraint")
-            {
-                let error_response = serde_json::json!({
-                    "status": "fail",
-                    "message": "Product with that name already exists",
-                });
-                return Err((StatusCode::CONFLICT, Json(error_response)));
-            }
-            return Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(json!({"status": "error","message": format!("{:?}", e)})),
-            ));
-        }
-    }
-}
