@@ -1,0 +1,26 @@
+  <section id="product1" class="section-p1" >
+      <h2>Featured Products</h2>
+      <p>Summer Collection New Morden Design</p>
+      <div class="pro-container" >
+        {% for product in products %}
+          <div class="pro">
+              <img id="img" src={{product.product_gallery}} alt="product image">
+              <div class="description">
+                  <!--<span id="brandGrid" >Cara</span>-->
+                  <!--<h5 id="T-styleGrid" >Calico T-shirt</h5>-->
+                  <h5 id="T-styleGrid" >{{product.title}}</h5>
+                  <div id="starsforgrid" class="starts">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                  </div>
+                  <!--<h5 id="priceGrid" class="price">$78</h5>-->
+                  <h5 id="priceGrid" class="price">{{product.price}}</h5>
+                  <span id="cartGrid" class="productCart" ><a href=""><i id="cart" class="fa-solid fa-cart-shopping"></i></a></span>
+              </div>
+          </div>
+      </div>
+      {% endfor %}</p>
+  </section>

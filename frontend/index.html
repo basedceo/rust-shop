@@ -2,45 +2,21 @@
 <html lang="en">
   {% include "utils/header.html" %}
 <body>
-    <nav id="nav">
-      <!--<a href="#"><img id="logo" src="logo_small.webp" alt="Logo"></a>-->
-      <a href="#"><img id="logo" src="{{images[0]}}" alt="Logo"></a>
-      <section class="mobile">
-          <a class="aTag"  href="cart.html"><span class="material-symbols-outlined">
-              shopping_bag
-              </span></a>
-          <span id="hamMenu" class="material-symbols-outlined">menu</span>
-      </section>
-    </nav>
-  <h1 class="title">{{page_title}}</h1>
-  <p>{{message}}</p>
-  <p>This is the 2nd paragraph line</p>
-  <a class="button" href="/about">About Page</a>
+  <link rel="stylesheet" href="/frontend/static/styles.css">
+    {% include "utils/top_nav.html" %}
+  <section id="mainBanner" >
+      <p style="background-image: url('static_img[2]');">
+      <h4>Trade-in-offer</h4>
+      <h2>Super value deals</h2>
+      <h1>On all products</h1>
+      <p>Save more with coupens & up to 70% off!</p>
+      <button type="button">Shop Now</button>
+  </section>
+  <a class="button" href="/multipart_create_product">Create Products</a>
   <button class="button is-primary">
     Button
   </button>
-  <p>{% for product in products %}
-  <li>{{loop.index}}. {{product.id}}</li>
-  <li>{{loop.index}}. {{product.title}}</li>
-  <li>{{loop.index}}. {{product.description}}</li>
-  <li>{{loop.index}}. {{product.category}}</li>
-  <li>{{loop.index}}. {{product.price}}</li>
-  <li>{{loop.index}}. {{product.sku}}</li>
-  <li>{{loop.index}}. {{product.product_type}}</li>
-  <li>{{loop.index}}. {{product.stock}}</li>
-  <li>{{loop.index}}. {{product.allow_backorders}}</li>
-  <li>{{loop.index}}. {{product.low_stock_threshold}}</li>
-  <li>{{loop.index}}. {{product.shipping_weight}}</li>
-  <!--<li><img src={{product.product_gallery}} alt="product image"></li>-->
-  <li><img id="product-image" src="{{images[2]}}" alt="product image"></li>
-  <li>{{loop.index}}. {{product.attributes}}</li>
-  <li>{{loop.index}}. {{product.variations}}</li>
-  <li>{{loop.index}}. {{product.shipping_dimensions}}</li>
-  <li>{{loop.index}}. {{product.shipping_class}}</li>
-  <li>{{loop.index}}. {{product.tax_status}}</li>
-  <li>{{loop.index}}. {{product.tax_class}}</li>
-  <li>{{loop.index}}. {{product.published}}</li>
-      {% endfor %}</p>
+    {% include "utils/featured_products.html" %}
 </body>
 </html>
 

@@ -22,3 +22,28 @@ Category= "testcategory"
 alloc::string::String
 Published= None
 core::option::Option<bool>
+
+
+  <p>{% for product in products %}
+  <li>{{loop.index0}}. {{product.id}}</li>
+  <li>{{loop.index0}}. {{product.title}}</li>
+  <li>{{loop.index0}}. {{product.description}}</li>
+  <li>{{loop.index0}}. {{product.category}}</li>
+  <li>{{loop.index0}}. {{product.price}}</li>
+  <li>{{loop.index0}}. {{product.sku}}</li>
+  <li>{{loop.index0}}. {{product.product_type}}</li>
+  <li>{{loop.index0}}. {{product.stock}}</li>
+  <li>{{loop.index0}}. {{product.allow_backorders}}</li>
+  <li>{{loop.index0}}. {{product.low_stock_threshold}}</li>
+  <li>{{loop.index0}}. {{product.shipping_weight}}</li>
+  <li><img src={{product.product_gallery}} alt="product image"></li>
+  <!--<li><img id="product-image" src="{{images[loop.index0]}}" alt="product image"></li>-->
+  <li>{{loop.index0}}. {{product.attributes}}</li>
+  <li>{{loop.index0}}. {{product.variations}}</li>
+  <li>{{loop.index0}}. {{product.shipping_dimensions}}</li>
+  <li>{{loop.index0}}. {{product.shipping_class}}</li>
+  <li>{{loop.index0}}. {{product.tax_status}}</li>
+  <li>{{loop.index0}}. {{product.tax_class}}</li>
+  <li>{{loop.index0}}. {{product.published}}</li>
+      {% endfor %}</p>
+
