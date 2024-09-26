@@ -234,6 +234,8 @@ li a.active::after {
 .pro-container img {
   border-radius: 20px;
   width: 100%;
+  height: 200px;
+  width: auto;
 }
 
 .pro-container .pro:hover {
@@ -290,6 +292,11 @@ li a.active::after {
 .pro-container .pro .price {
   color: green;
 }
+
+/* .pro-container .pro .img {
+  height: 100px;
+  width: 500px;
+} */
 
 .pro-container .productCart #cart {
   color: limegreen;

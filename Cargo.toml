@@ -21,3 +21,5 @@ rand = "0.8.4"
 #used for frontend templating
 tera = "1"
 lazy_static = "1.4"
+urlencoding = "2.1.3"
+base64 = "0.22.1" 
