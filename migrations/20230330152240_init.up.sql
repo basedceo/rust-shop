@@ -3,6 +3,19 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE
+  IF NOT EXISTS attributes (
+    name TEXT NOT NULL,
+    slug TEXT NOT NULL,
+    terms TEXT[],
+    created_at TIMESTAMP
+    WITH
+        TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP
+    WITH
+        TIME ZONE DEFAULT NOW()
+  );
+
+CREATE TABLE
     IF NOT EXISTS products (
         -- if an item in model.rs does not have a an Option<> then you must use NOT NULL in the db
         id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),

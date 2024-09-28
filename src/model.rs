@@ -2,6 +2,17 @@ use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
 
+//stores attributes for products
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ProductAttributes {
+    pub name: String,
+    pub slug: String,
+    pub terms: Vec<String>,
+    #[serde(rename = "createdAt")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(rename = "updatedAt")]
+    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+}
 //this is the sqlx database model
 #[derive(Debug, FromRow, Deserialize, Serialize)]
 #[allow(non_snake_case)]

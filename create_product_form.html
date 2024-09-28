@@ -23,9 +23,11 @@
 
         <li>
           <label for="category">Select a category for your product</label>
-          <select id="category" name="category">
+          <select id="category" name="category" multiple>
             <option value="computers">computers</option>
             <option value="routers">routers</option>
+            <option value="merch">merch</option>
+            <option value="clothing">clothing</option>
             <option value="digital storage">digital storage</option>
             <option value="phone cases">phone cases</option>
             <option value="t shirts">t shirts</option>
@@ -81,7 +83,7 @@
         </li>
         <li>
           <label for="product_gallery"></label>
-          <input type="file" name="product_gallery" value="product_gallery">
+          <input type="file" multiple name="product_gallery" value="product_gallery">
         </li>
         <li>
           <label for="attributes"></label>
@@ -92,7 +94,7 @@
         <li>
           <label for="variations"></label>
           Select a variation for your product
-          <input type="text" name="variations" value="FIX WITH ASKAMA">
+          <input type="text" name="variations" value="FIX WITH ASKAMA" multiple>
         </li>
 
         <li>

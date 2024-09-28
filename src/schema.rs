@@ -11,6 +11,15 @@ pub struct ParamOptions {
     pub id: String,
 }
 
+//stores attributes for products
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ProductAttributes {
+    pub name: String,
+    pub slug: String,
+    pub terms: Vec<String>,
+}
+//TODO add the following parameters
+//featured
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreateProductSchema {
     pub title: String,
@@ -26,6 +35,7 @@ pub struct CreateProductSchema {
     pub product_gallery: String,
     pub attributes: String,
     pub variations: String,
+    //TODO break this up into length width and height
     pub shipping_dimensions: String,
     pub shipping_class: String,
     //this is optional
