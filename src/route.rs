@@ -9,7 +9,7 @@ use tower_http::services::ServeDir;
 
 use crate::{
     handler::{
-        create_product_form, health_checker_handler, tera_product_handler, multipart_create_product_handler, single_product_display,
+        create_product_form, health_checker_handler, multipart_create_product_handler, product_attributes_template, single_product_display, tera_product_handler
     },
     AppState,
 };
@@ -23,6 +23,7 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
         .route("/multipart_create_product", get(create_product_form).post(multipart_create_product_handler))
         .route("/api/healthchecker", get(health_checker_handler))
         .route("/products", get(tera_product_handler))
+        .route("/attributes", get(product_attributes_template))
         .route("/product/:id", get(single_product_display))
         //.route("/:id", get(single_product_display))
         //.nest_service(path, get_service(ServeDir::new("./frontend/")).handle_error(|_| async { (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Error") }))

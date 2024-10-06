@@ -17,7 +17,7 @@ use serde_json::json;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    model::{ProductModel},
+    model::{ProductAttributes, ProductModel},
     schema::{CreateProductSchema, FilterOptions},
     AppState,
 };
@@ -41,6 +41,7 @@ fn common_context() -> tera::Context {
 }
 
 //Displays products with tera templates at 127.0.0.1:8000/products
+//TODO rename this to featured_products_handler
 pub async fn tera_product_handler(
     opts: Option<Query<FilterOptions>>,
     State(data): State<Arc<AppState>>,
@@ -63,7 +64,7 @@ pub async fn tera_product_handler(
     if query_result.is_err() {
         let error_response = serde_json::json!({
             "status": "fail",
-            "message": "Something bad happened while fetching all note items",
+            "message": "Something bad happened while fetching featured products",
         });
         //TODO create function to handle errors
         //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
@@ -79,6 +80,7 @@ pub async fn tera_product_handler(
     context.insert("message", "This is Index page.");
     context.insert("products", &products);
 
+    //Static images used across most pages
     let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
     context.insert("static_img", &static_images);
 
@@ -114,6 +116,7 @@ pub async fn tera_product_handler(
     Html(output.unwrap())
 }
 
+//TODO rename this to single product handler
 pub async fn single_product_display(
     Path(id): Path<Uuid>,
     State(data): State<Arc<AppState>>,
@@ -157,6 +160,45 @@ pub async fn single_product_display(
 
 }
 
+pub async fn product_attributes_template(
+    State(data): State<Arc<AppState>>
+) -> Html<String> {
+    //TODO make this into a function that can be reused in product catalog and single product
+
+
+    let query_result = sqlx::query_as!(
+        ProductAttributes,
+        "SELECT * FROM attributes ORDER by id",
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if query_result.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all product attribute items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let attributes = query_result.unwrap();
+
+    //tera
+    let tera = Tera::new("frontend/**/*.html").unwrap();
+    let mut context = common_context();
+
+    context.insert("page_title", "Product Attributes Page");
+    context.insert("attributes", &attributes);
+
+    //Static images used across most pages
+    let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
+    context.insert("static_img", &static_images);
+
+    let output = tera.render("product_attributes.html", &context);
+    Html(output.unwrap())
+}
+
 pub async fn create_product_form() -> Html<&'static str> {
     Html(std::include_str!("../create_product_form.html"))
 }
@@ -165,101 +207,74 @@ fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>());
 }
 
+pub async fn create_attribute_form() -> Html<&'static str> {
+    Html(std::include_str!("../frontend/product_attributes.html"))
+}
 
 //Create product attributes
-pub async fn create_product_attribute_handler(
+//TODO rename to create_attribute_handler
+pub async fn create_attribute_handler(
     State(data): State<Arc<AppState>>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let mut text_inputs = vec![String::new(); 17]; // Store text inputs
+    let mut name = String::new();
+    let mut slug = String::new();
+    let mut terms = Vec::new();
 
-    let field_mapping = [
-        "title", "description", "category", "price", "sku", "product_type", "stock",
-        "allow_backorders", "low_stock_threshold", "shipping_weight", "product_gallery", "attributes",
-        "variations", "shipping_dimensions", "shipping_class", "tax_status", "tax_class"
-    ];
-    
-    //tera
-    let tera = Tera::new("frontend/**/*.html").unwrap();
-    let mut context = common_context();
-
+    // Iterate over multipart fields to collect name, slug, and terms
     while let Some(field) = multipart.next_field().await.unwrap() {
         if let Some(field_name) = field.name() {
-            print!("{:?} = ", field_name);
-            //TODO refactor this so that the product_gallery case is handled first and its related
-            //text_inputs[index] is equal to the file path after the image is uploaded
-            //if let Some(index) = field_mapping.iter().position(|&name| name == field_name) {
-            if field_name == "product_gallery" {
-                // File upload handling
-                let file_name = field.file_name().unwrap().to_string();
-                let content_type = field.content_type().unwrap().to_string();
-                let data = field.bytes().await.unwrap();
-
-                let Some(file_type) = content_type.split('/').nth(1) else {
-                    return Err((StatusCode::BAD_REQUEST, Json(json!({"error": "Invalid file type"}))));
-                };
-
-                //let upload_path = format!("/home/kenny/code/Rust/rust-axum-postgres-api/uploads/{}", file_name);
-                let upload_path = format!("frontend/img/products/{}", BASE64_STANDARD.encode(&file_name));
-                println!("Uploading file to {:?}", upload_path);
-                fs::write(&upload_path, data).await.unwrap();
-                text_inputs[10] = upload_path;
-            } else if let Some(index) = field_mapping.iter().position(|&name| name == field_name) {
-                text_inputs[index] = field.text().await.unwrap();
-                //println!("{:?} is {:?}", field_name, text_inputs[index]);
-                println!("{:?}", text_inputs[index]);
-            } 
+            match field_name {
+                "name" => {
+                    name = field.text().await.unwrap();
+                }
+                "slug" => {
+                    slug = field.text().await.unwrap();
+                }
+                "terms" => {
+                    let term = field.text().await.unwrap();
+                    terms.push(term);  // Assuming `terms` is a Vec<String>
+                }
+                _ => {
+                    println!("Unexpected field: {}", field_name);
+                }
+            }
         }
     }
 
+    // Validate that required fields are populated
+    if name.is_empty() || slug.is_empty() || terms.is_empty() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Name, slug, and terms are required fields.",
+        });
+        return Err((StatusCode::BAD_REQUEST, Json(error_response)));
+    }
+    // Flatten the Vec<[&str; 3]> to a Vec<&str> for PostgreSQL array compatibility
+    let terms_flat: Vec<&str> = terms.into_iter().flatten().collect();
+
+    // Now insert into the database after fields are collected
     let query_result = sqlx::query_as!(
-        ProductModel,
-        "INSERT INTO products (
-        title,
-        description,
-        category,
-        price,
-        sku,
-        product_type,
-        stock,
-        allow_backorders,
-        low_stock_threshold,
-        shipping_weight,
-        product_gallery,
-        attributes,
-        variations,
-        shipping_dimensions,
-        shipping_class,
-        tax_status,
-        tax_class) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING *",
-        text_inputs[0],
-        text_inputs[1],
-        text_inputs[2],
-        text_inputs[3],
-        text_inputs[4],
-        text_inputs[5],
-        text_inputs[6],
-        text_inputs[7],
-        text_inputs[8],
-        text_inputs[9],
-        text_inputs[10],
-        text_inputs[11],
-        text_inputs[12],
-        text_inputs[13],
-        text_inputs[14],
-        text_inputs[15],
-        text_inputs[16]
+        ProductAttributes,
+        "INSERT INTO attributes (name, slug, terms) VALUES ($1, $2, $3) RETURNING *",
+        name,
+        slug,
+        //&terms as &[String] // Assuming `terms` is a TEXT[] column in the database
+        &terms_flat // Passing the flattened array as a reference
     )
     .fetch_one(&data.db)
     .await;
 
+    // Handle the result of the database operation
     match query_result {
-        Ok(note) => {
-            let note_response = json!({"status": "success","data": json!({
-                "note": note
-            })});
-
-            return Ok((StatusCode::CREATED, Json(note_response)));
+        Ok(attribute) => {
+            let response = json!({
+                "status": "success",
+                "data": {
+                    "attribute": attribute
+                }
+            });
+            Ok((StatusCode::CREATED, Json(response)))
         }
         Err(e) => {
             if e.to_string()
@@ -267,21 +282,17 @@ pub async fn create_product_attribute_handler(
             {
                 let error_response = serde_json::json!({
                     "status": "fail",
-                    "message": "Product with that name already exists",
+                    "message": "Product attribute with that name already exists",
                 });
                 return Err((StatusCode::CONFLICT, Json(error_response)));
             }
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(json!({"status": "error","message": format!("{:?}", e)})),
+                Json(json!({"status": "error", "message": format!("{:?}", e)})),
             ));
         }
     }
-    // Process `text_inputs` as necessary
-    
-    //Ok(())
 }
-
 
 
 
@@ -302,9 +313,10 @@ pub async fn multipart_create_product_handler(
         "variations", "shipping_dimensions", "shipping_class", "tax_status", "tax_class"
     ];
     
+    //TODO Remove this, it's unnecessary
     //tera
-    let tera = Tera::new("frontend/**/*.html").unwrap();
-    let mut context = common_context();
+    //let tera = Tera::new("frontend/**/*.html").unwrap();
+    //let mut context = common_context();
 
     while let Some(field) = multipart.next_field().await.unwrap() {
         if let Some(field_name) = field.name() {

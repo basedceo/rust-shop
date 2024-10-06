@@ -3,11 +3,15 @@ use sqlx::FromRow;
 use uuid::Uuid;
 
 //stores attributes for products
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, FromRow, Deserialize, Serialize)]
 pub struct ProductAttributes {
+    pub id: Uuid,
     pub name: String,
     pub slug: String,
-    pub terms: Vec<String>,
+    //TODO turn this into a vector of string arrays Vec<[T; N]>
+    //pub terms: Vec<String>,
+    //pub terms: Vec<[String; 3]>,
+    //pub terms: Vec<[&str; 3]>,
     #[serde(rename = "createdAt")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(rename = "updatedAt")]

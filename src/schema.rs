@@ -16,7 +16,8 @@ pub struct ParamOptions {
 pub struct ProductAttributes {
     pub name: String,
     pub slug: String,
-    pub terms: Vec<String>,
+    //pub terms: Vec<String>,
+    pub terms: Vec<[String; 3]>,
 }
 //TODO add the following parameters
 //featured

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="attribute_terms_edit.css" media="all">
+
+<h1 data-wp-c16t="true" data-wp-component="Text" class="components-truncate components-text woocommerce-layout__header-heading woocommerce-layout__header-left-align css-bc6pwz e19lxcc00">Edit attribute</h1></div>
+<h1 class="wp-heading-inline">Product App Control</h1>
+
+
+<hr class="wp-header-end">
+
+<div id="ajax-response"></div>
+
+<form class="search-form wp-clearfix" method="get">
+<input type="hidden" name="taxonomy" value="pa_app-control">
+<input type="hidden" name="post_type" value="product">
+
+<p class="search-box">
+	<label class="screen-reader-text" for="tag-search-input">Search App Control:</label>
+	<input type="search" id="tag-search-input" name="s" value="">
+		<input type="submit" id="search-submit" class="button" value="Search App Control"></p>
+		
+</form>
+<!--left part of the screen strart-->
+<div id="col-container" class="wp-clearfix">
+
+<div id="col-left">
+<div class="col-wrap">
+
+	<p>Attribute terms can be assigned to products and variations.</p>
+<p>Note: Deleting a term will remove it from all products and variations to which it has been assigned. Recreating a term will not automatically assign it back to products.</p>
+
+<div class="form-wrap">
+<h2>Add new App Control</h2>
+<form id="addtag" method="post" action="https://based.win/wp-admin/edit-tags.php" class="validate">
+<input type="hidden" name="action" value="add-tag">
+<input type="hidden" name="screen" value="edit-pa_app-control">
+<input type="hidden" name="taxonomy" value="pa_app-control">
+<input type="hidden" name="post_type" value="product">
+	<input type="hidden" id="_wpnonce_add-tag" name="_wpnonce_add-tag" value="9110057e4e"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product">
+<div class="form-field form-required term-name-wrap">
+	<label for="tag-name">Name</label>
+	<input name="tag-name" id="tag-name" type="text" value="" size="40" aria-required="true" aria-describedby="name-description">
+	<p id="name-description">The Name is how it will appear on the site.</p>
+</div>
+<div class="form-field term-slug-wrap">
+	<label for="tag-slug">Slug</label>
+	<input name="slug" id="tag-slug" type="text" value="" size="40" aria-describedby="slug-description">
+	<p id="slug-description">The “slug” is the URL-friendly version of the name. Must be all lowercase and contain only letters, numbers, and hyphens.</p>
+</div>
+	<div class="form-field term-description-wrap">
+	<label for="tag-description">Description</label>
+	<textarea name="description" id="tag-description" rows="5" cols="40" aria-describedby="description-description"></textarea>
+	<p id="description-description">The description is only used in the backend.</p>
+</div>
+
+		<p class="submit">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="Add new App Control">		<span class="spinner"></span>
+	</p>
+	</form></div>
+</div>
+</div><!-- /col-left -->
+<!--left part of the screen end-->
+
+<!--Submitting Add new App Control-->
+<div id="col-right">
+<div class="col-wrap">
+
+
+<form id="posts-filter" method="post">
+<input type="hidden" name="taxonomy" value="pa_app-control">
+<input type="hidden" name="post_type" value="product">
+
+<input type="hidden" id="_wpnonce" name="_wpnonce" value="b82e17e898"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product">	<div class="tablenav top">
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label><select name="action" id="bulk-action-selector-top">
+<option value="-1">Bulk actions</option>
+	<option value="delete">Delete</option>
+</select>
+<input type="submit" id="doaction" class="button action" value="Apply">
+		</div>
+//hello
+<!--Submitting Add new App Control-->
+			<div class="tablenav-pages one-page"><span class="displaying-num">4 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
+<span class="paging-input"><label for="current-page-selector" class="screen-reader-text">Current Page</label><input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="1" aria-describedby="table-paging"><span class="tablenav-paging-text"> of <span class="total-pages">1</span></span></span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">»</span></span></div>
+		<br class="clear">
+	</div>
+		<h2 class="screen-reader-text">Tags list</h2><table class="wp-list-table widefat fixed striped table-view-list tags ui-sortable">
+		<caption class="screen-reader-text">Table ordered by Name. Ascending.</caption>	
+              <!--Top of display bar-->
+              //top of attribute display bar
+<thead>
+	<tr>
+		<td id="cb" class="manage-column column-cb check-column"><input id="cb-select-all-1" type="checkbox">
+			<label for="cb-select-all-1"><span class="screen-reader-text">Select All</span></label></td><th scope="col" id="name" class="manage-column column-name column-primary sorted asc" aria-sort="ascending" abbr="Name"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=name&amp;order=desc"><span>Name</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span></a></th><th scope="col" id="description" class="manage-column column-description sortable desc" abbr="Description"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=description&amp;order=asc"><span>Description</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" id="slug" class="manage-column column-slug sortable desc" abbr="Slug"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=slug&amp;order=asc"><span>Slug</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" id="posts" class="manage-column column-posts num sortable desc" abbr="Count"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=count&amp;order=asc"><span>Count</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th>	<td class="column-handle" style="display: table-cell;"></td></tr>
+	</thead>
+          <!--Beginning of the attributes list-->
+	<tbody id="the-list" data-wp-lists="list:tag">
+		<tr id="tag-154" class="level-0"><th scope="row" class="check-column"><input type="checkbox" name="delete_tags[]" value="154" id="cb-select-154"><label for="cb-select-154"><span class="screen-reader-text">Select NO App Control</span></label></th><td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=154&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="“NO App Control” (Edit)">NO App Control</a></strong><br><div class="hidden" id="inline_154"><div class="name">NO App Control</div><div class="slug">no-app-control</div><div class="parent">0</div></div><div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=154&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="Edit “NO App Control”">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" class="button-link editinline" aria-label="Quick edit “NO App Control” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete"><a href="https://based.win/wp-admin/edit-tags.php?action=delete&amp;taxonomy=pa_app-control&amp;tag_ID=154&amp;_wpnonce=65b50880eb" class="delete-tag aria-button-if-js" aria-label="Delete “NO App Control”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">no-app-control</td><td class="posts column-posts" data-colname="Count"><a href="https://based.win/wp-admin/edit.php?taxonomy=pa_app-control&amp;term=no-app-control&amp;post_type=product">0</a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>
+            <tr id="tag-155" class="level-0"><th scope="row" class="check-column"><input type="checkbox" name="delete_tags[]" value="155" id="cb-select-155"><label for="cb-select-155"><span class="screen-reader-text">Select Phone App Control 1</span></label></th><td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=155&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="“Phone App Control 1” (Edit)">Phone App Control 1</a></strong><br><div class="hidden" id="inline_155"><div class="name">Phone App Control 1</div><div class="slug">phone-app-control-1</div><div class="parent">0</div></div><div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=155&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="Edit “Phone App Control 1”">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" class="button-link editinline" aria-label="Quick edit “Phone App Control 1” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete"><a href="https://based.win/wp-admin/edit-tags.php?action=delete&amp;taxonomy=pa_app-control&amp;tag_ID=155&amp;_wpnonce=7ef072b788" class="delete-tag aria-button-if-js" aria-label="Delete “Phone App Control 1”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">phone-app-control-1</td><td class="posts column-posts" data-colname="Count"><a href="https://based.win/wp-admin/edit.php?taxonomy=pa_app-control&amp;term=phone-app-control-1&amp;post_type=product">0</a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>
+            <tr id="tag-153" class="level-0"><th scope="row" class="check-column"><input type="checkbox" name="delete_tags[]" value="153" id="cb-select-153"><label for="cb-select-153"><span class="screen-reader-text">Select Phone App Control 2</span></label></th><td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=153&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="“Phone App Control 2” (Edit)">Phone App Control 2</a></strong><br><div class="hidden" id="inline_153"><div class="name">Phone App Control 2</div><div class="slug">phone-app-control-2</div><div class="parent">0</div></div><div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=153&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="Edit “Phone App Control 2”">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" class="button-link editinline" aria-label="Quick edit “Phone App Control 2” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete"><a href="https://based.win/wp-admin/edit-tags.php?action=delete&amp;taxonomy=pa_app-control&amp;tag_ID=153&amp;_wpnonce=95dfe4a380" class="delete-tag aria-button-if-js" aria-label="Delete “Phone App Control 2”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">phone-app-control-2</td><td class="posts column-posts" data-colname="Count"><a href="https://based.win/wp-admin/edit.php?taxonomy=pa_app-control&amp;term=phone-app-control-2&amp;post_type=product">0</a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>
+            <tr id="tag-156" class="level-0"><th scope="row" class="check-column"><input type="checkbox" name="delete_tags[]" value="156" id="cb-select-156"><label for="cb-select-156"><span class="screen-reader-text">Select WIFI App Control</span></label></th><td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=156&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="“WIFI App Control” (Edit)">WIFI App Control</a></strong><br><div class="hidden" id="inline_156"><div class="name">WIFI App Control</div><div class="slug">wifi-app-control</div><div class="parent">0</div></div><div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/term.php?taxonomy=pa_app-control&amp;tag_ID=156&amp;post_type=product&amp;wp_http_referer=%2Fwp-admin%2Fedit-tags.php%3Ftaxonomy%3Dpa_app-control%26post_type%3Dproduct" aria-label="Edit “WIFI App Control”">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" class="button-link editinline" aria-label="Quick edit “WIFI App Control” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete"><a href="https://based.win/wp-admin/edit-tags.php?action=delete&amp;taxonomy=pa_app-control&amp;tag_ID=156&amp;_wpnonce=c10beff1cc" class="delete-tag aria-button-if-js" aria-label="Delete “WIFI App Control”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">wifi-app-control</td><td class="posts column-posts" data-colname="Count"><a href="https://based.win/wp-admin/edit.php?taxonomy=pa_app-control&amp;term=wifi-app-control&amp;post_type=product">0</a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>	
+</tbody>
+<!--End of the attributes list-->
+
+	<tfoot>
+	<tr>
+		<td class="manage-column column-cb check-column"><input id="cb-select-all-2" type="checkbox">
+			<label for="cb-select-all-2"><span class="screen-reader-text">Select All</span></label></td><th scope="col" class="manage-column column-name column-primary sorted asc" aria-sort="ascending" abbr="Name"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=name&amp;order=desc"><span>Name</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span></a></th><th scope="col" class="manage-column column-description sortable desc" abbr="Description"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=description&amp;order=asc"><span>Description</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" class="manage-column column-slug sortable desc" abbr="Slug"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=slug&amp;order=asc"><span>Slug</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" class="manage-column column-posts num sortable desc" abbr="Count"><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product&amp;orderby=count&amp;order=asc"><span>Count</span><span class="sorting-indicators"><span class="sorting-indicator asc" aria-hidden="true"></span><span class="sorting-indicator desc" aria-hidden="true"></span></span> <span class="screen-reader-text">Sort ascending.</span></a></th>	<td class="column-handle" style="display: table-cell;"></td></tr>
+	</tfoot>
+
+</table>
+			<div class="tablenav bottom">
+
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label><select name="action2" id="bulk-action-selector-bottom">
+<option value="-1">Bulk actions</option>
+	<option value="delete">Delete</option>
+</select>
+<input type="submit" id="doaction2" class="button action" value="Apply">
+		</div>
+			<div class="tablenav-pages one-page"><span class="displaying-num">4 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
+<span class="screen-reader-text">Current Page</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">1 of <span class="total-pages">1</span></span></span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">»</span></span></div>
+		<br class="clear">
+	</div>
+		
+</form>
+
+</div>
+</div><!-- /col-right -->
+
+</div><!-- /col-container -->

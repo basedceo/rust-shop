@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- saved from url=(0077)https://based.win/wp-admin/edit.php?post_type=product&page=product_attributes -->
-	<title>Attributes ‹ Based.win — WordPress</title>
+	<title>Based Shop Product Attributes</title>
 <link rel="stylesheet" href="./minified.css" media="all">
 			<h1>Attributes</h1>
 			<br class="clear">
@@ -18,6 +18,18 @@
 								</tr>
 							</thead>
 							<tbody>
+            {% for attribute in attributes %}
+              {% if loop.index % 2 > 0 %}
+                <tr class="alternate">
+              {% else %}
+                <tr></tr>
+            *******SUDO CODE START*******
+            for attribute in attributes
+            #use the index that starts at 1
+            if attribute.index % 2 > 0 :
+
+
+            ********SUDO CODE END********
 																		<tr class="alternate">
 												<td>
 													<strong><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product">App Control</a></strong>
@@ -25,13 +37,11 @@
 													<div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/edit.php?post_type=product&amp;page=product_attributes&amp;edit=11">Edit</a> | </span><span class="delete"><a class="delete" href="https://based.win/wp-admin/edit.php?post_type=product&amp;page=product_attributes&amp;delete=11&amp;_wpnonce=6eafeafdb9">Delete</a></span></div>
 												</td>
 												<td>app-control</td>
-																								<td>
-													Custom ordering												</td>
+												<td>Custom ordering</td>
 												<td class="attribute-terms">
 													NO App Control, Phone App Control 1, Phone App Control 2, WIFI App Control													<br><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product" class="configure-terms">Configure terms</a>
 												</td>
-											</tr>
-																					<tr>
+											</tr><tr>
 												<td>
 													<strong><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_blade-color&amp;post_type=product">Blade Color</a></strong>
 
