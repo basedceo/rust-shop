@@ -17,8 +17,17 @@ pub struct ProductAttributes {
     pub name: String,
     pub slug: String,
     //pub terms: Vec<String>,
-    pub terms: Vec<[String; 3]>,
+    //pub terms: Vec<[String; 3]>,
+    pub order_by: String,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ProductTerms {
+    pub name: String,         // First term (NOT NULL)
+    pub slug: String,         // Second term (NOT NULL)
+    pub description: Option<String>, // Third term (can be NULL)
+}
+
 //TODO add the following parameters
 //featured
 #[derive(Serialize, Deserialize, Debug)]

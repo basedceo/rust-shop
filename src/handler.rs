@@ -17,7 +17,7 @@ use serde_json::json;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    model::{ProductAttributes, ProductModel},
+    model::{ProductAttributes, ProductModel, ProductTerms},
     schema::{CreateProductSchema, FilterOptions},
     AppState,
 };
@@ -42,6 +42,9 @@ fn common_context() -> tera::Context {
 
 //Displays products with tera templates at 127.0.0.1:8000/products
 //TODO rename this to featured_products_handler
+//TODO fix this function and all other tera functions so that they don't crash when the db is
+//empty, static images should still be able to render, information from db should be renderend in
+//an if else
 pub async fn tera_product_handler(
     opts: Option<Query<FilterOptions>>,
     State(data): State<Arc<AppState>>,
@@ -116,7 +119,7 @@ pub async fn tera_product_handler(
     Html(output.unwrap())
 }
 
-//TODO rename this to single product handler
+//TODO rename this to single product template
 pub async fn single_product_display(
     Path(id): Path<Uuid>,
     State(data): State<Arc<AppState>>,
@@ -168,7 +171,7 @@ pub async fn product_attributes_template(
 
     let query_result = sqlx::query_as!(
         ProductAttributes,
-        "SELECT * FROM attributes ORDER by id",
+        "SELECT * FROM product_attributes ORDER by id",
     )
     .fetch_all(&data.db)
     .await;
@@ -182,7 +185,25 @@ pub async fn product_attributes_template(
         //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
     }
 
+    //TODO you probably only need to select the term names
+    let terms_query = sqlx::query_as!(
+        ProductTerms,
+        "SELECT * FROM product_terms ORDER by product_id"
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if terms_query.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all product attribute items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
     let attributes = query_result.unwrap();
+    let terms = terms_query.unwrap();
 
     //tera
     let tera = Tera::new("frontend/**/*.html").unwrap();
@@ -190,13 +211,160 @@ pub async fn product_attributes_template(
 
     context.insert("page_title", "Product Attributes Page");
     context.insert("attributes", &attributes);
+    context.insert("terms", &terms);
 
     //Static images used across most pages
     let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
     context.insert("static_img", &static_images);
 
-    let output = tera.render("product_attributes.html", &context);
+    //let output = (tera.render("product_attributes.html", "product_terms.html" &context))
+    //let output = tera.render("product_attributes.html", &context);
+    let output = tera.render("product_attributes/product_attributes.html", &context);
     Html(output.unwrap())
+}
+
+pub async fn product_terms_template(
+    Path(id): Path<Uuid>,
+    State(data): State<Arc<AppState>>
+) -> Html<String> {
+
+    //TODO turn this query into a function
+    let terms_query = sqlx::query_as!(
+        ProductTerms,
+        "SELECT * FROM product_terms WHERE product_id = $1",
+        id as Uuid,
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if terms_query.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all product attribute items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let attributes_query = sqlx::query_as!(
+        ProductAttributes,
+        "SELECT * FROM product_attributes WHERE id = $1",
+        id as Uuid,
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if attributes_query.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching product terms items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let terms = terms_query.unwrap();
+    let attributes = attributes_query.unwrap();
+    
+    //tera
+    //let tera = Tera::new("frontend/**/*.html").unwrap();
+    //let tera = Tera::new("frontend/**/*.html,frontend/product_attributes/**/*.html").unwrap();
+    let tera = Tera::new("frontend/**/*.html").unwrap();
+    //let tera = Tera::new("frontend/*.html,frontend/**/*.html").unwrap();
+    //let tera = Tera::new("frontend/product_attributes/**/*.html").unwrap();
+    let mut context = common_context();
+
+    context.insert("page_title", "Product Attributes Page");
+    context.insert("terms", &terms);
+    context.insert("attributes", &attributes);
+
+    //Static images used across most pages
+    let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
+    context.insert("static_img", &static_images);
+
+    //let output = tera.render("product_app_control_attribute_edit.html", &context);
+    let output = tera.render("product_attributes/product_app_control_attribute_edit.html", &context);
+
+    Html(output.unwrap())
+}
+
+pub async fn create_product_terms_handler(
+    State(data): State<Arc<AppState>>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    let mut term_name = String::new();
+    let mut term_slug = String::new();
+    let mut term_desc = String::new();
+
+    // Iterate over multipart fields to collect name, slug, and terms
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        if let Some(field_name) = field.name() {
+            match field_name {
+                "term_name" => {
+                    term_name = field.text().await.unwrap();
+                }
+                "term_slug" => {
+                    term_slug = field.text().await.unwrap();
+                }
+                "term_desc" => {
+                    term_desc = field.text().await.unwrap();
+                }
+                _ => {
+                    println!("Unexpected field: {}", field_name);
+                }
+            }
+        }
+    }
+
+    // Validate that required fields are populated
+    if term_name.is_empty() || term_slug.is_empty() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Name and slug are required fields.",
+        });
+        return Err((StatusCode::BAD_REQUEST, Json(error_response)));
+    }
+
+    // Now insert into the database after fields are collected
+    println!("inserting product term into the database");
+    let query_result = sqlx::query_as!(
+        ProductTerms,
+        "INSERT INTO product_terms (name, slug, description) VALUES ($1, $2, $3) RETURNING *",
+        term_name,
+        term_slug,
+        term_desc,
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    // Handle the result of the database operation
+    //TODO verify if this is what prints in the browser and update it accordingly
+    match query_result {
+        Ok(attribute) => {
+            let response = json!({
+                "status": "success",
+                "data": {
+                    "attribute": attribute
+                }
+            });
+            Ok((StatusCode::CREATED, Json(response)))
+        }
+        Err(e) => {
+            if e.to_string()
+                .contains("duplicate key value violates unique constraint")
+            {
+                let error_response = serde_json::json!({
+                    "status": "fail",
+                    "message": "Product attribute with that name already exists",
+                });
+                return Err((StatusCode::CONFLICT, Json(error_response)));
+            }
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({"status": "error", "message": format!("{:?}", e)})),
+            ));
+        }
+    }
 }
 
 pub async fn create_product_form() -> Html<&'static str> {
@@ -208,32 +376,31 @@ fn print_type_of<T>(_: &T) {
 }
 
 pub async fn create_attribute_form() -> Html<&'static str> {
-    Html(std::include_str!("../frontend/product_attributes.html"))
+    Html(std::include_str!("../frontend/product_attributes/product_attributes.html"))
 }
 
 //Create product attributes
 //TODO rename to create_attribute_handler
-pub async fn create_attribute_handler(
+pub async fn create_product_attribute_handler(
     State(data): State<Arc<AppState>>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let mut name = String::new();
-    let mut slug = String::new();
-    let mut terms = Vec::new();
+    let mut attribute_name = String::new();
+    let mut attribute_slug = String::new();
+    let mut order_by = String::new();
 
     // Iterate over multipart fields to collect name, slug, and terms
     while let Some(field) = multipart.next_field().await.unwrap() {
         if let Some(field_name) = field.name() {
             match field_name {
-                "name" => {
-                    name = field.text().await.unwrap();
+                "attribute_name" => {
+                    attribute_name = field.text().await.unwrap();
                 }
-                "slug" => {
-                    slug = field.text().await.unwrap();
+                "attribute_slug" => {
+                    attribute_slug = field.text().await.unwrap();
                 }
-                "terms" => {
-                    let term = field.text().await.unwrap();
-                    terms.push(term);  // Assuming `terms` is a Vec<String>
+                "order_by" => {
+                    order_by = field.text().await.unwrap();
                 }
                 _ => {
                     println!("Unexpected field: {}", field_name);
@@ -243,24 +410,21 @@ pub async fn create_attribute_handler(
     }
 
     // Validate that required fields are populated
-    if name.is_empty() || slug.is_empty() || terms.is_empty() {
+    if attribute_name.is_empty() || attribute_slug.is_empty() {
         let error_response = serde_json::json!({
             "status": "fail",
             "message": "Name, slug, and terms are required fields.",
         });
         return Err((StatusCode::BAD_REQUEST, Json(error_response)));
     }
-    // Flatten the Vec<[&str; 3]> to a Vec<&str> for PostgreSQL array compatibility
-    let terms_flat: Vec<&str> = terms.into_iter().flatten().collect();
 
     // Now insert into the database after fields are collected
     let query_result = sqlx::query_as!(
         ProductAttributes,
-        "INSERT INTO attributes (name, slug, terms) VALUES ($1, $2, $3) RETURNING *",
-        name,
-        slug,
-        //&terms as &[String] // Assuming `terms` is a TEXT[] column in the database
-        &terms_flat // Passing the flattened array as a reference
+        "INSERT INTO product_attributes (name, slug, order_by) VALUES ($1, $2, $3) RETURNING *",
+        attribute_name,
+        attribute_slug,
+        order_by,
     )
     .fetch_one(&data.db)
     .await;
@@ -294,9 +458,6 @@ pub async fn create_attribute_handler(
     }
 }
 
-
-
-
 ////TODO get a function working that can accept product parameters and images
 ////TODO images with a space in the name aren't being displayed properly, the src="" ends at the space
 ///Some of this was written by ChatGPT
@@ -307,6 +468,7 @@ pub async fn multipart_create_product_handler(
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
     let mut text_inputs = vec![String::new(); 17]; // Store text inputs
 
+    //maps variables to tag names in create_product_form.html
     let field_mapping = [
         "title", "description", "category", "price", "sku", "product_type", "stock",
         "allow_backorders", "low_stock_threshold", "shipping_weight", "product_gallery", "attributes",

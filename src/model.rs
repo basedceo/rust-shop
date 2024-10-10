@@ -8,15 +8,23 @@ pub struct ProductAttributes {
     pub id: Uuid,
     pub name: String,
     pub slug: String,
+    pub order_by: String,
     //TODO turn this into a vector of string arrays Vec<[T; N]>
-    //pub terms: Vec<String>,
-    //pub terms: Vec<[String; 3]>,
-    //pub terms: Vec<[&str; 3]>,
+    //pub terms: Vec<[String; 3]>, // New field: vector of arrays, each with 3 strings
     #[serde(rename = "createdAt")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(rename = "updatedAt")]
     pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
 }
+
+#[derive(Debug, FromRow, Deserialize, Serialize)]
+pub struct ProductTerms {
+    pub product_id: Uuid,       // Foreign key to ProductAttributes
+    pub name: String,         // term Name First term (NOT NULL)
+    pub slug: String,         // term Slug Second term (NOT NULL)
+    pub description: Option<String>, // term Description Third term (can be NULL)
+}
+
 //this is the sqlx database model
 #[derive(Debug, FromRow, Deserialize, Serialize)]
 #[allow(non_snake_case)]

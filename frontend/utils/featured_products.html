@@ -3,7 +3,7 @@
       <p>Summer Collection New Morden Design</p>
       <div class="pro-container" >
         {% for product in products %}
-          {% set_global product_index = loop.index %}
+      {#{% set_global product_index = loop.index %}#}
           <div class="pro">
         <a href="/product/{{ product.id }}">
               <img id="img" src={{product.product_gallery}} alt="product image">

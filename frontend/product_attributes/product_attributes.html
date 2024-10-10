@@ -13,29 +13,32 @@
 								<tr>
 									<th scope="col">Name</th>
 									<th scope="col">Slug</th>
-																		<th scope="col">Order by</th>
+                  <th scope="col">Order by</th>
 									<th scope="col">Terms</th>
 								</tr>
 							</thead>
 							<tbody>
             {% for attribute in attributes %}
-              {% if loop.index % 2 > 0%}
+              {% set_global attribute_index = loop.index %}
+              {% if loop.index % 2 > 0 %}
+                Hello
                 <tr class="alternate">
               {% else %}
                 <tr></tr>
-            <td>
-            <strong><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product">{{attribute.name}}</a></strong>
+              {% endif %}
+              <td>
+              <strong><a href=<<!--TODO add link to view the attribute on an attribute template page-->{{attribute.name}}</a></strong>
               
-													<div class="row-actions"><span class="edit"><a href="https://based.win/wp-admin/edit.php?post_type=product&amp;page=product_attributes&amp;edit=11">Edit</a> | </span><span class="delete"><a class="delete" href="https://based.win/wp-admin/edit.php?post_type=product&amp;page=product_attributes&amp;delete=11&amp;_wpnonce=6eafeafdb9">Delete</a></span></div>
+													<div class="row-actions"><span class="edit"><a href=<<!--TODO add link to view the attribute on an attribute template page-->>Edit</a> | </span><span class="delete"><a class="delete" href=<<!--TODO add link to view the attribute on an attribute template page-->>Delete</a></span></div>
 												</td>
             <td>{{attribute.slug}}</td>
             <td>Custom ordering</td>
             <td class="attribute-terms">
-              {% for term in attribute.terms %}
+              <!--TODO FIX THIS, attribute.terms COME FROM A DIFFERENT MODEL-->
+              {% for term in terms %}
                 term, 
               {% endfor %}
-              <br><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product" class="configure-terms">Configure terms</a>
-            {% endif %}
+              <br><a href="/product-attribute/{{ attribute.id }}" class="configure-terms">Configure terms</a>
             {% endfor %}
               </tbody>
 						</table>
@@ -46,17 +49,17 @@
 						<div class="form-wrap">
 							<h2>Add new attribute</h2>
 							<p>Attributes let you define extra product data, such as size or color. You can use these attributes in the shop sidebar using the "layered nav" widgets.</p>
-							<form action="https://based.win/wp-admin/edit.php?post_type=product&amp;page=product_attributes" method="post">
+							<form action="/attributes" method="post" enctype="multipart/form-data">
 								
 								<div class="form-field">
 									<label for="attribute_label">Name</label>
-									<input name="attribute_label" id="attribute_label" type="text" value="">
+									<input name="attribute_name" id="attribute_label" type="text" value="">
 									<p class="description">Name for the attribute (shown on the front-end).</p>
 								</div>
 
 								<div class="form-field">
 									<label for="attribute_name">Slug</label>
-									<input name="attribute_name" id="attribute_name" type="text" value="" maxlength="28">
+									<input name="attribute_slug" id="attribute_name" type="text" value="" maxlength="28">
 									<p class="description">Unique slug/reference for the attribute; must be no more than 28 characters.</p>
 								</div>
 
@@ -69,7 +72,7 @@
 								
 								<div class="form-field">
 									<label for="attribute_orderby">Default sort order</label>
-									<select name="attribute_orderby" id="attribute_orderby">
+									<select name="order_by" id="attribute_orderby">
 										<option value="menu_order">Custom ordering</option>
 										<option value="name">Name</option>
 										<option value="name_num">Name (numeric)</option>
@@ -79,8 +82,11 @@
 								</div>
 
 								
-								<p class="submit"><button type="submit" name="add_new_attribute" id="submit" class="button button-primary" value="Add attribute">Add attribute</button></p>
-								<input type="hidden" id="_wpnonce" name="_wpnonce" value="8e0fc936c7"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit.php?post_type=product&amp;page=product_attributes">							</form>
+								<p class="submit"><button type="submit" id="submit" class="button button-primary" value="Add attribute">Add attribute</button></p>
+            <!--<input type="hidden" id="_wpnonce" name="_wpnonce" value="Add attribute">-->
+            <!--<input type="hidden" id="_wpnonce" name="_wpnonce" value="8e0fc936c7"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit.php?post_type=product&amp;page=product_attributes">-->
+
+          </form>
 						</div>
 					</div>
 				</div>

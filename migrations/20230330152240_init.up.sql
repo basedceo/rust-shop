@@ -3,17 +3,28 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE
-  IF NOT EXISTS attributes (
+  IF NOT EXISTS product_attributes (
       id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
       name TEXT NOT NULL,
-      slug TEXT NOT NULL,
-      terms TEXT[] NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      order_by TEXT NOT NULL, --how terms will be ordered
+      --terms TEXT[] NOT NULL,
       created_at TIMESTAMP
       WITH
           TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP
       WITH
           TIME ZONE DEFAULT NOW()
+  );
+
+CREATE TABLE
+  IF NOT EXISTS product_terms (
+      product_id UUID REFERENCES product_attributes(id) ON DELETE CASCADE, -- Foreign key to `product_attributes`
+      --TODO update term_1 to name, term_2 to slug, and term_3 to description
+      name TEXT NOT NULL,    -- First string in the array (NOT NULL)
+      slug TEXT NOT NULL,    -- Second string in the array (NOT NULL)
+      description TEXT,             -- Third string in the array (can be NULL)
+      PRIMARY KEY (product_id, name, slug) -- Composite primary key
   );
 
 CREATE TABLE

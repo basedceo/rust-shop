@@ -1,3 +1,4 @@
+<!--****THIS HTML PAGE ISN'T BEING USED****-->
 <!DOCTYPE html>
 <html lang="en">
 <!-- saved from url=(0077)https://based.win/wp-admin/edit.php?post_type=product&page=product_attributes -->
@@ -19,6 +20,7 @@
 							</thead>
 							<tbody>
             {% for attribute in attributes %}
+              {% set_global attribute_index = loop.index %}
               {% if loop.index % 2 > 0%}
                 <tr class="alternate">
               {% else %}
@@ -34,7 +36,8 @@
               {% for term in attribute.terms %}
                 term, 
               {% endfor %}
-              <br><a href="https://based.win/wp-admin/edit-tags.php?taxonomy=pa_app-control&amp;post_type=product" class="configure-terms">Configure terms</a>
+              <br>
+              <a href="/product-attribute/{{ term.product_id }}" class="configure-terms">Configure terms</a>
             {% endif %}
             {% endfor %}
               </tbody>
