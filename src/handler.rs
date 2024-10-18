@@ -217,8 +217,6 @@ pub async fn product_attributes_template(
     let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
     context.insert("static_img", &static_images);
 
-    //let output = (tera.render("product_attributes.html", "product_terms.html" &context))
-    //let output = tera.render("product_attributes.html", &context);
     let output = tera.render("product_attributes/product_attributes.html", &context);
     Html(output.unwrap())
 }
@@ -295,11 +293,17 @@ pub async fn create_product_terms_handler(
     let mut term_name = String::new();
     let mut term_slug = String::new();
     let mut term_desc = String::new();
+    let mut attribute_id = Uuid::new_v4();
+
 
     // Iterate over multipart fields to collect name, slug, and terms
     while let Some(field) = multipart.next_field().await.unwrap() {
         if let Some(field_name) = field.name() {
             match field_name {
+                "attribute_id" => {
+                    let id_str = field.text().await.unwrap();
+                    attribute_id = Uuid::parse_str(&id_str).unwrap();
+                }
                 "term_name" => {
                     term_name = field.text().await.unwrap();
                 }
@@ -329,7 +333,8 @@ pub async fn create_product_terms_handler(
     println!("inserting product term into the database");
     let query_result = sqlx::query_as!(
         ProductTerms,
-        "INSERT INTO product_terms (name, slug, description) VALUES ($1, $2, $3) RETURNING *",
+        "INSERT INTO product_terms (product_id, name, slug, description) VALUES ($1, $2, $3, $4) RETURNING *",
+        attribute_id,
         term_name,
         term_slug,
         term_desc,

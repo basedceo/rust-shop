@@ -36,6 +36,7 @@
 <form action="/product-attribute/{{ attributes[0].id }}" method="post" enctype="multipart/form-data">
 <div class="form-field form-required term-name-wrap">
 	<label for="tag-name">Name</label>
+	<input name="attribute_id" id="tag-name" type="hidden" value="{{ attributes[0].id }}">
 	<input name="term_name" id="tag-name" type="text" value="" size="40" aria-required="true" aria-describedby="name-description">
 	<p id="name-description">The Name is how it will appear on the site.</p>
 </div>
@@ -100,7 +101,9 @@
               {% for term in terms %}
               <tr id="tag-154" class="level-0"><th scope="row" class="check-column"><input type="checkbox" name="delete_tags[]" value="154" id="cb-select-154"><label for="cb-select-154"><span class="screen-reader-text">Select {{term.name}}</span></label></th><td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="<!--This will be the edit page for the product term-->" aria-label="{{term.name}}">{{term.name}}</a></strong><br><div class="hidden" id="inline_154"><div class="name">{{term.name}}</div><div class="slug">{{term.slug}}</div><div class="parent">0</div></div><div class="row-actions"><span class="edit"><a href="<!--This will also link to the edit page for the product term-->" aria-label="Edit “NO App Control”">Edit</a> | </span>
                 <!--<span class="inline hide-if-no-js"><button type="button" class="button-link editinline" aria-label="Quick edit “NO App Control” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span>-->
-                <span class="delete"><a href="<!--This will delete the product term from the database, This should produce a popup alert asking if you're sure you want to delete-->" class="delete-tag aria-button-if-js" aria-label="Delete “NO App Control”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">{{term.desc}}</span></td><td class="slug column-slug" data-colname="Slug">{{term.slug}}</td><td class="posts column-posts" data-colname="Count"><a href="<!--This should link to a page that lists all products that use the specific term-->"><!--This should be a number that corresponds to all products that use the specific term--></a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>
+                <span class="delete"><a href="<!--This will delete the product term from the database, This should produce a popup alert asking if you're sure you want to delete-->" class="delete-tag aria-button-if-js" aria-label="Delete “NO App Control”" role="button">Delete</a></span></div><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="description column-description" data-colname="Description">
+                  <!--TODO description doesn't show up, even when the term has a description-->
+                  <span aria-hidden="true">{{term.description}}</span><span class="screen-reader-text">{{term.description}}</span></td><td class="slug column-slug" data-colname="Slug">{{term.slug}}</td><td class="posts column-posts" data-colname="Count"><a href="<!--This should link to a page that lists all products that use the specific term-->"><!--This should be a number that corresponds to all products that use the specific term--></a></td><td class="column-handle ui-sortable-handle" style="display: table-cell;"></td></tr>
               {% endfor %}
 </tbody>
 <!--End of the attributes list-->

@@ -21,7 +21,6 @@
             {% for attribute in attributes %}
               {% set_global attribute_index = loop.index %}
               {% if loop.index % 2 > 0 %}
-                Hello
                 <tr class="alternate">
               {% else %}
                 <tr></tr>
@@ -34,9 +33,12 @@
             <td>{{attribute.slug}}</td>
             <td>Custom ordering</td>
             <td class="attribute-terms">
-              <!--TODO FIX THIS, attribute.terms COME FROM A DIFFERENT MODEL-->
+              <!--TODO this shows the same terms for each attribute, figure out how to map terms to attributes here-->
               {% for term in terms %}
-                term, 
+                {% if term.product_id == attribute.id %}
+                  {{term.name}}, 
+                {% else %}
+                {% endif %}
               {% endfor %}
               <br><a href="/product-attribute/{{ attribute.id }}" class="configure-terms">Configure terms</a>
             {% endfor %}

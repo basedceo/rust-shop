@@ -3,7 +3,7 @@ use sqlx::FromRow;
 use uuid::Uuid;
 
 //stores attributes for products
-#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[derive(Eq, Hash, PartialEq, Clone, Debug, FromRow, Deserialize, Serialize)]
 pub struct ProductAttributes {
     pub id: Uuid,
     pub name: String,
@@ -17,13 +17,15 @@ pub struct ProductAttributes {
     pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
-#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[derive(Debug, FromRow, Deserialize, Serialize, Clone)]
 pub struct ProductTerms {
     pub product_id: Uuid,       // Foreign key to ProductAttributes
     pub name: String,         // term Name First term (NOT NULL)
     pub slug: String,         // term Slug Second term (NOT NULL)
     pub description: Option<String>, // term Description Third term (can be NULL)
 }
+
+//TODO create a mapping of ProduductTerms to Product Attributes
 
 //this is the sqlx database model
 #[derive(Debug, FromRow, Deserialize, Serialize)]
