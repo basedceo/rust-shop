@@ -17,7 +17,7 @@ use serde_json::json;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    model::{ProductAttributes, ProductModel, ProductTerms},
+    model::{ProductAttributes, ProductCategories, ProductModel, ProductTerms},
     schema::{CreateProductSchema, FilterOptions},
     AppState,
 };
@@ -283,6 +283,46 @@ pub async fn product_terms_template(
     //let output = tera.render("product_app_control_attribute_edit.html", &context);
     let output = tera.render("product_attributes/product_app_control_attribute_edit.html", &context);
 
+    Html(output.unwrap())
+}
+
+//TODO finish implementing this function, based on product_attributes_template
+pub async fn product_categories_template(
+    State(data): State<Arc<AppState>>
+) -> Html<String> {
+    //TODO make this into a function that can be reused in product catalog and single product
+
+
+    let query_result = sqlx::query_as!(
+        ProductCategories,
+        "SELECT * FROM product_categories ORDER by id",
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if query_result.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all product attribute items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let categories = query_result.unwrap();
+
+    //tera
+    let tera = Tera::new("frontend/**/*.html").unwrap();
+    let mut context = common_context();
+
+    context.insert("page_title", "Product Categories Page");
+    context.insert("categories", &categories);
+
+    //Static images used across most pages
+    let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
+    context.insert("static_img", &static_images);
+
+    let output = tera.render("product_categories/product_categories.html", &context);
     Html(output.unwrap())
 }
 

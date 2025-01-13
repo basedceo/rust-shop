@@ -17,6 +17,21 @@ pub struct ProductAttributes {
     pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
+//stores categories for products
+#[derive(Eq, Hash, PartialEq, Clone, Debug, FromRow, Deserialize, Serialize)]
+pub struct ProductCategories {
+    pub id: Uuid,
+    pub name: String,
+    pub slug: String,
+    pub order_by: String,
+    //TODO turn this into a vector of string arrays Vec<[T; N]>
+    //pub terms: Vec<[String; 3]>, // New field: vector of arrays, each with 3 strings
+    #[serde(rename = "createdAt")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(rename = "updatedAt")]
+    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+}
+
 #[derive(Debug, FromRow, Deserialize, Serialize, Clone)]
 pub struct ProductTerms {
     pub product_id: Uuid,       // Foreign key to ProductAttributes

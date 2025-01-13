@@ -18,6 +18,20 @@ CREATE TABLE
   );
 
 CREATE TABLE
+  IF NOT EXISTS product_categories (
+      id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      order_by TEXT NOT NULL, --how terms will be ordered
+      created_at TIMESTAMP
+      WITH
+          TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP
+      WITH
+          TIME ZONE DEFAULT NOW()
+  );
+
+CREATE TABLE
   IF NOT EXISTS product_terms (
       product_id UUID REFERENCES product_attributes(id) ON DELETE CASCADE, -- Foreign key to `product_attributes`
       --TODO update term_1 to name, term_2 to slug, and term_3 to description

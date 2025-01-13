@@ -21,6 +21,16 @@ pub struct ProductAttributes {
     pub order_by: String,
 }
 
+//stores categories for products
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ProductCategories {
+    pub name: String,
+    pub slug: String,
+    //pub terms: Vec<String>,
+    //pub terms: Vec<[String; 3]>,
+    pub order_by: String,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ProductTerms {
     pub name: String,         // First term (NOT NULL)

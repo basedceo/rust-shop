@@ -4,6 +4,14 @@ create a struct for product information
 
 TODO
 # /src/handler.rs
+Create CRUD handlers that function like those in WooCommerce Dashboard
+Products
+[-]   All Products
+[-]   Add New Product   /multipart_create_product
+[-]   Categories
+[-]   Tags
+[-]   Attributes        /attributes
+[-]   Reviews
 create CRUD handlers for attributes
 file:///home/kenny/code/frontend/E-commerce/Wordpress/Attributes%20%E2%80%B9%20Based.win%20%E2%80%94%20WordPress.html
 

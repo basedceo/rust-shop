@@ -1,0 +1,35 @@
+Product name
+###This section requires Javascript
+###Consider using code from this https://github.com/freedit-org/freedit
+https://stackoverflow.com/questions/64937951/how-to-create-a-post-box-with-html-and-css
+Product description
+
+Product categories
+Product data - drop down menu	[] Virtual [] Downloadable
+
+
+###This section requires Javascript
+###Consider using this to solve that https://www.cssplay.co.uk/menus/cssplay-ultimate-tree-menu.html
+General
+	Regular price
+	Sale price
+	Tax status - drop down menu
+	Tax class - drop down menu
+Inventory
+	SKU
+	GTIN, UPC, EAN, or ISBN
+	Stock management
+	Stock status
+	Sold individually
+Shipping
+	Weight(lbs)
+	Dimensions(in)	Length	Width	Height
+	Shipping Class - Drop down
+Linked Products
+	Upsells
+	Cross-sells
+Attributes
+	Add new - drop down menu
+	New attribute	Name:	Value(s):
+Product tags
+Product short description
