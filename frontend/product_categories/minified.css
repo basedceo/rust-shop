@@ -19,6 +19,51 @@
 .clear {
     clear: both;
 }
+input[type="file"] {
+  display: none;
+}
+
+.wp-core-ui .button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+
+.file-upload {
+  display: flex;
+  padding: 1px 15px;
+  background-color: #fff;
+  color: #2271b1;
+  margin-left: 80px;
+  width: 155px;
+  height: 32px;
+  line-height: 32px;
+  border-width: 1px;
+  border-color: #2271b1;
+  border-style: solid;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: center;
+}
+/* Add hover effects */
+.file-upload:hover {
+  background-color: #f0f0f1;
+  color: #174e7a;
+  border-color: #174e7a;
+}
 .wp-clearfix:after {
     content: "";
     display: table;
@@ -57,6 +102,9 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+.alternate {
+    background-color: #f6f7f7;
 }
 body {
     background: #f0f0f1;
@@ -181,9 +229,6 @@ h3 {
 .widefat .num {
     text-align: center;
 }
-.striped > tbody > :nth-child(odd) {
-    background-color: #f6f7f7;
-}
 .checkbox,
 .widefat tfoot td,
 .widefat tfoot th,
@@ -222,18 +267,6 @@ a#remove-post-thumbnail {
 .widefat p {
     color: #2c3338;
 }
-.spinner {
-    background: url(images/spinner.gif) no-repeat;
-    background-size: 20px 20px;
-    display: inline-block;
-    visibility: hidden;
-    float: right;
-    vertical-align: middle;
-    opacity: 0.7;
-    width: 20px;
-    height: 20px;
-    margin: 4px 10px 0;
-}
 br.clear {
     height: 2px;
     line-height: 0.15;
@@ -247,23 +280,6 @@ img {
 button,
 input,
 select,
-textarea {
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-}
-input,
-textarea {
-    font-size: 14px;
-}
-textarea {
-    overflow: auto;
-    padding: 2px 6px;
-    line-height: 1.42857143;
-    resize: vertical;
-}
-input,
 select {
     margin: 0 1px;
 }

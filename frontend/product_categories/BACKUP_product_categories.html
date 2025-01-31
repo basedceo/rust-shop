@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&post_type=product -->
+<html lang="en">
+	<title>Product categories ‹ Based.win — WordPress</title>
+<link rel="stylesheet" href="./frontend/product_categories/minified.css" media="all">
+<h1 class="wp-heading-inline">Product categories</h1>
+
+<form class="search-form wp-clearfix" method="get">
+<input type="hidden" name="taxonomy" value="product_cat">
+<input type="hidden" name="post_type" value="product">
+
+<p class="search-box">
+	<label class="screen-reader-text" for="tag-search-input">Search categories:</label>
+	<input type="search" id="tag-search-input" name="s" value="">
+		<input type="submit" id="search-submit" class="button" value="Search categories"></p>
+		
+</form>
+
+<div id="col-container" class="wp-clearfix">
+
+<div id="col-left">
+<div class="col-wrap">
+
+	<p>Product categories for your store can be managed here. To change the order of categories on the front-end you can drag and drop to sort them. To see more categories listed click the "screen options" link at the top-right of this page.</p>
+
+<div class="form-wrap">
+<!--start left section-->
+<h2>Add new category</h2>
+<form id="addtag" method="post" action="https://based.win/wp-admin/edit-tags.php" class="validate">
+<input type="hidden" name="action" value="add-tag">
+<input type="hidden" name="screen" value="edit-product_cat">
+<input type="hidden" name="taxonomy" value="product_cat">
+<input type="hidden" name="post_type" value="product">
+	<input type="hidden" id="_wpnonce_add-tag" name="_wpnonce_add-tag" value="afb310fb36"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product">
+<div class="form-field form-required term-name-wrap">
+	<label for="tag-name">Name</label>
+	<input name="tag-name" id="tag-name" type="text" value="" size="40" aria-required="true" aria-describedby="name-description">
+	<p id="name-description">The name is how it appears on your site.</p>
+</div>
+<div class="form-field term-slug-wrap">
+	<label for="tag-slug">Slug</label>
+	<input name="slug" id="tag-slug" type="text" value="" size="40" aria-describedby="slug-description">
+	<p id="slug-description">The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.</p>
+</div>
+	<div class="form-field term-parent-wrap">
+	<label for="parent">Parent category</label>
+		<select name="parent" id="parent" class="postform" aria-describedby="parent-description">
+    <option value="-1">None</option>
+<!--TODO this should list all parent categories sorted alphabetically with their child categories sorted alphabetically-->
+            <!--{#{% for category in categories %}#}-->
+  <!--{#{{ categories | sort(attribute="name") }}#}-->
+  <!--{#{% for category in categories %}#}-->
+  <!--<option class="level-0" value="270">{#{{category.name}}#}</option>-->
+                <!--{#{% endfor %}#}-->
+	<option class="level-0" value="270">Batteries</option>
+	<option class="level-0" value="17">Cables</option>
+	<option class="level-0" value="21">Carrying Case</option>
+	<option class="level-0" value="271">Charging Plug</option>
+	<option class="level-0" value="272">Computer Parts</option>
+	<option class="level-1" value="19">&nbsp;&nbsp;&nbsp;Digital Storage</option>
+	<option class="level-1" value="397">&nbsp;&nbsp;&nbsp;Fans</option>
+	<option class="level-1" value="269">&nbsp;&nbsp;&nbsp;Keyboards</option>
+	<option class="level-1" value="18">&nbsp;&nbsp;&nbsp;RAM</option>
+	<option class="level-1" value="414">&nbsp;&nbsp;&nbsp;Wifi Card</option>
+	<option class="level-0" value="435">Desk Mats</option>
+	<option class="level-0" value="267">Earbuds</option>
+	<option class="level-0" value="16">Game Controller</option>
+	<option class="level-0" value="266">Headphones</option>
+	<option class="level-0" value="445">Laptop</option>
+	<option class="level-0" value="326">Merch</option>
+	<option class="level-1" value="443">&nbsp;&nbsp;&nbsp;Bags</option>
+	<option class="level-1" value="327">&nbsp;&nbsp;&nbsp;Cups</option>
+	<option class="level-1" value="329">&nbsp;&nbsp;&nbsp;Hats</option>
+	<option class="level-1" value="331">&nbsp;&nbsp;&nbsp;Jackets</option>
+	<option class="level-1" value="328">&nbsp;&nbsp;&nbsp;Shirts</option>
+	<option class="level-1" value="330">&nbsp;&nbsp;&nbsp;Towel</option>
+	<option class="level-0" value="268">Mouse</option>
+	<option class="level-0" value="20">Phone Cases</option>
+	<option class="level-0" value="402">Power Strip</option>
+	<option class="level-0" value="415">Routers</option>
+	<option class="level-0" value="15">Uncategorized</option>
+</select>
+				<p id="parent-description">Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band.</p>
+	</div>
+	<div class="form-field term-description-wrap">
+	<label for="tag-description">Description</label>
+	<textarea name="description" id="tag-description" rows="5" cols="40" aria-describedby="description-description"></textarea>
+	<p id="description-description">The description is not prominent by default; however, some themes may show it.</p>
+</div>
+
+			<div class="form-field term-display-type-wrap">
+			<label for="display_type">Display type</label>
+			<select id="display_type" name="display_type" class="postform">
+				<option value="">Default</option>
+				<option value="products">Products</option>
+				<option value="subcategories">Subcategories</option>
+				<option value="both">Both</option>
+			</select>
+		</div>
+		<div class="form-field term-thumbnail-wrap">
+			<label>Thumbnail</label>
+			<div id="product_cat_thumbnail" style="float: left; margin-right: 10px;"><img src="./Product categories ‹ Based.win — WordPress_files/woocommerce-placeholder-300x300.png" width="60px" height="60px"></div>
+			<div style="line-height: 60px;">
+				<input type="hidden" id="product_cat_thumbnail_id" name="product_cat_thumbnail_id">
+				<button type="button" class="upload_image_button button">Upload/Add image</button>
+				<button type="button" class="remove_image_button button" style="display: none;">Remove image</button>
+			</div>
+			<div class="clear"></div>
+		</div>
+			<p class="submit">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="Add new category">		<span class="spinner"></span>
+	</p>
+	</form></div>
+</div>
+</div><!-- /col-left -->
+
+<div id="col-right">
+<div class="col-wrap">
+
+
+<form id="posts-filter" method="post">
+<input type="hidden" name="taxonomy" value="product_cat">
+<input type="hidden" name="post_type" value="product">
+
+<input type="hidden" id="_wpnonce" name="_wpnonce" value="30daec370d"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product">	<div class="tablenav top">
+
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label><select name="action" id="bulk-action-selector-top">
+<option value="-1">Bulk actions</option>
+	<option value="delete">Delete</option>
+</select>
+<input type="submit" name="bulk_action" id="doaction" class="button action" value="Apply">
+		</div>
+			<h2 class="screen-reader-text">Categories list navigation</h2><div class="tablenav-pages"><span class="displaying-num">27 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
+<span class="paging-input"><label for="current-page-selector" class="screen-reader-text">Current Page</label><input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="1" aria-describedby="table-paging"><span class="tablenav-paging-text"> of <span class="total-pages">2</span></span></span>
+<a class="next-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
+<a class="last-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
+		<br class="clear">
+	</div>
+          <!--this is the area on the right-->
+          <!--copy the for list from line 21 in product_attributes.html-->
+		<h2 class="screen-reader-text">Categories list</h2><table class="wp-list-table widefat fixed striped table-view-list tags ui-sortable">
+		<caption class="screen-reader-text">Table ordered hierarchically. Ascending.</caption>	<thead>
+	<tr>
+		<td id="cb" class="manage-column column-cb check-column"><input id="cb-select-all-1" type="checkbox">
+			<label for="cb-select-all-1"><span class="screen-reader-text">Select All</span></label></td><th scope="col" id="thumb" class="manage-column column-thumb">Image</th><th scope="col" id="name" class="manage-column column-name column-primary sorted asc" aria-sort="ascending" abbr="Name"><span>Name</span></a></th><th scope="col" id="description" class="manage-column column-description sortable desc" abbr="Description"><span>Description</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" id="slug" class="manage-column column-slug sortable desc" abbr="Slug"><span>Slug</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" id="posts" class="manage-column column-posts num sortable desc" abbr="Count"><span>Count</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" id="handle" class="manage-column column-handle" style="display: table-cell;"></th>	</tr>
+	</thead>
+
+	<tbody id="the-list" data-wp-lists="list:tag">
+			
+              <!--{#{% for category in categories %}-->
+                <!--{% set_global category_index = loop.index %}-->
+                <!--{% if loop.index % 2 > 0 %}-->
+                  <!--<tr class="alternate">-->
+                <!--{% else %}-->
+                  <!--<tr></tr>-->
+              <!--{% endif %}-->
+              <!--{% if loop.index == 1 %}-->
+              <!--<th scope="row">-->
+              <!--{% else %}-->
+              <!--<th scope="row"><input type="checkbox" name="delete_tags[]" value="270" id="cb-select-270">-->
+              <!--{% endif %}#}-->
+
+<!--</th><td class="thumb column-thumb" data-colname="Image"><img src={#{{category.image}}#} alt="Thumbnail" height="48" width="48"></td>-->
+              <!--<th scope="row"><input type="checkbox" name="delete_tags[]" value="270" id="cb-select-270"></th><td class="thumb column-thumb" data-colname="Image"><img src={#{{category.image}}#} alt="Thumbnail" height="48" width="48"></td>-->
+                <!--Name Column-->
+              <!--<td data-colname="Name"><strong><a class="row-title" aria-label="“{#{{category.name}}#}” (Edit)">{#{{category.name}}#}</a></strong><br><div class="hidden" id="inline_15"><div class="name">{#{{category.name}}#}</div><div class="slug">{#{{category.name}}#}</div>-->
+                <!--indicates what category id this is a child of (enter 0 if not a child)-->
+                <!--<div class="parent">0</div></div>-->
+                <!--<div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{#{{category.name}}#}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>-->
+              <!--<td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{#{{category.slug}}#}</td><td class="posts column-posts" data-colname="Count">{#{{category.count}}#}</a></td></tr>	-->
+              <!--PASTE TEMPLATE CODE ABOVE HERE-->
+<tr>
+<!--Thumbnail Column-->
+                <!--START PRODUCT ROW-->
+<th scope="row"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/woocommerce-placeholder-300x300.png" alt="Thumbnail" height="48" width="48"></td>
+                <!--Name Column-->
+<td data-colname="Name"><strong><a class="row-title" aria-label="“Uncategorized” (Edit)">Uncategorized</a></strong><br><div class="hidden" id="inline_15"><div class="name">Uncategorized</div><div class="slug">uncategorized</div>
+                <div class="parent">0</div></div>
+<!--these are the options that appear below each category name to view, edit, or delete them-->
+                <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Uncategorized” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
+                <!--Description, Slug, Count-->
+                <td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">uncategorized</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+              <!--END PRODUCT ROW-->
+              <!--START PRODUCT ROW-->
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="270" id="cb-select-270"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/51elA6KM6L-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Batteries” (Edit)">Batteries</a></strong><br><div class="hidden" id="inline_270"><div class="name">Batteries</div><div class="slug">batteries</div><div class="parent">0</div></div>
+<!--these are the options that appear below each category name to view, edit, or delete them-->
+                <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Batteries” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td>
+                <!--Description, Slug, Count-->
+                <td class="description column-description" data-colname="Description"><p>Internal and external batteries, including portable chargers, laptop batteries, and AA batteries.</p></td><td class="slug column-slug" data-colname="Slug">batteries</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+              <!--END PRODUCT ROW-->
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="17" id="cb-select-17"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/cables-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Cables” (Edit)">Cables</a></strong><br><div class="hidden" id="inline_17"><div class="name">Cables</div><div class="slug">cables</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Cables” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>phone cables, usb, etherent, hdmi, etc.</p></td><td class="slug column-slug" data-colname="Slug">cables</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="21" id="cb-select-21"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/laptop_case-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Carrying Case” (Edit)">Carrying Case</a></strong><br><div class="hidden" id="inline_21"><div class="name">Carrying Case</div><div class="slug">laptop-case</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Carrying Case” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Laptop Case and anti RFID case</p></td><td class="slug column-slug" data-colname="Slug">laptop-case</td><td class="posts column-posts" data-colname="Count">1</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="271" id="cb-select-271"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/61PouQrqmUL-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Charging Plug” (Edit)">Charging Plug</a></strong><br><div class="hidden" id="inline_271"><div class="name">Charging Plug</div><div class="slug">charging-plug</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Charging Plug” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>charging plug</p></td><td class="slug column-slug" data-colname="Slug">charging-plug</td><td class="posts column-posts" data-colname="Count">1</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="272" id="cb-select-272"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/06LiQJzDE1OdJcUdbgqwz1X-1-150x150.webp" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Computer Parts” (Edit)">Computer Parts</a></strong><br><div class="hidden" id="inline_272"><div class="name">Computer Parts</div><div class="slug">computer-parts</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Computer Parts” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Computer parts, hard drives, ram, power supplies, mother boards, cases etc (some may be used or refurbished, make sure to check descriptions)</p></td><td class="slug column-slug" data-colname="Slug">computer-parts</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="19" id="cb-select-19"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/digital_storage-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Digital Storage” (Edit)">— Digital Storage</a></strong><br><div class="hidden" id="inline_19"><div class="name">Digital Storage</div><div class="slug">digital_storage</div><div class="parent">272</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Digital Storage” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Digital Storage, flash drives, ssd, hard drives, sd cards.</p></td><td class="slug column-slug" data-colname="Slug">digital_storage</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="397" id="cb-select-397"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/Noctua-NF-F12-Computer-Case-fan-120mm-PWM-Damping-Quiet-Radiator-For-Desktop-case-CPU-air.jpg_Q90.jpg_-150x150.webp" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Fans” (Edit)">— Fans</a></strong><br><div class="hidden" id="inline_397"><div class="name">Fans</div><div class="slug">fans</div><div class="parent">272</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Fans” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Desktop case fans, CPU/GPU fans, and radiator fans for water cooling.</p></td><td class="slug column-slug" data-colname="Slug">fans</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="269" id="cb-select-269"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/71suJxdFFEL._AC_SL1500_-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Keyboards” (Edit)">— Keyboards</a></strong><br><div class="hidden" id="inline_269"><div class="name">Keyboards</div><div class="slug">keyboards</div><div class="parent">272</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Keyboards” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Computer keyboards, USB and Bluetooth.</p></td><td class="slug column-slug" data-colname="Slug">keyboards</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="18" id="cb-select-18"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/ram-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“RAM” (Edit)">— RAM</a></strong><br><div class="hidden" id="inline_18"><div class="name">RAM</div><div class="slug">ram</div><div class="parent">272</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “RAM” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>desktop ram and SODIMM laptop ram.</p></td><td class="slug column-slug" data-colname="Slug">ram</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="414" id="cb-select-414"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/61ZuqqlWHQL-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Wifi Card” (Edit)">— Wifi Card</a></strong><br><div class="hidden" id="inline_414"><div class="name">Wifi Card</div><div class="slug">wifi-card</div><div class="parent">272</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Wifi Card” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>wifi cards for laptops and desktops</p></td><td class="slug column-slug" data-colname="Slug">wifi-card</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="435" id="cb-select-435"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/Large-Office-Computer-Desk-Mat-Modern-Table-Keyboard-Mouse-Pad-Wool-Felt-Laptop-Cushion-Desk-Mat-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Desk Mats” (Edit)">Desk Mats</a></strong><br><div class="hidden" id="inline_435"><div class="name">Desk Mats</div><div class="slug">desk-mats</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Desk Mats” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>mat for your desk, also a mousepad</p></td><td class="slug column-slug" data-colname="Slug">desk-mats</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="267" id="cb-select-267"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/xiaomi-mi-true-earbuds-basic-2-wireless-headphones-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Earbuds” (Edit)">Earbuds</a></strong><br><div class="hidden" id="inline_267"><div class="name">Earbuds</div><div class="slug">earbuds</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Earbuds” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Earbuds for listening to audio.</p></td><td class="slug column-slug" data-colname="Slug">earbuds</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="16" id="cb-select-16"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/game_controllers-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Game Controller” (Edit)">Game Controller</a></strong><br><div class="hidden" id="inline_16"><div class="name">Game Controller</div><div class="slug">game-controller</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Game Controller” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Input devices meant for video games, game pads, joy sticks, steering wheels, etc…</p></td><td class="slug column-slug" data-colname="Slug">game-controller</td><td class="posts column-posts" data-colname="Count">1</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="266" id="cb-select-266"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/Hf08be0a6155f4f07bf2aa58beea04a0a2-150x150.webp" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Headphones” (Edit)">Headphones</a></strong><br><div class="hidden" id="inline_266"><div class="name">Headphones</div><div class="slug">headphones</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Headphones” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Headphones and earbuds for listening to audio.</p></td><td class="slug column-slug" data-colname="Slug">headphones</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="445" id="cb-select-445"></th><td class="thumb column-thumb" data-colname="Image"><img src="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Laptop” (Edit)">Laptop</a></strong><br><div class="hidden" id="inline_445"><div class="name">Laptop</div><div class="slug">laptop</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Laptop” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>a laptop computer</p></td><td class="slug column-slug" data-colname="Slug">laptop</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="326" id="cb-select-326"></th><td class="thumb column-thumb" data-colname="Image"><img src="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Merch” (Edit)">Merch</a></strong><br><div class="hidden" id="inline_326"><div class="name">Merch</div><div class="slug">merch</div><div class="parent">0</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Merch” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>Branded merchandise, hats, cups, mugs, shirts, hoodies, etc.</p></td><td class="slug column-slug" data-colname="Slug">merch</td><td class="posts column-posts" data-colname="Count">29</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="443" id="cb-select-443"></th><td class="thumb column-thumb" data-colname="Image"><img src="./Product categories ‹ Based.win — WordPress_files/redirect02252023200230-150x150.jpg" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Bags” (Edit)">— Bags</a></strong><br><div class="hidden" id="inline_443"><div class="name">Bags</div><div class="slug">bags</div><div class="parent">326</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Bags” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>shopping bags</p></td><td class="slug column-slug" data-colname="Slug">bags</td><td class="posts column-posts" data-colname="Count">2</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="327" id="cb-select-327"></th><td class="thumb column-thumb" data-colname="Image"><img src="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Cups” (Edit)">— Cups</a></strong><br><div class="hidden" id="inline_327"><div class="name">Cups</div><div class="slug">cups</div><div class="parent">326</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Cups” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>drinking cups</p></td><td class="slug column-slug" data-colname="Slug">cups</td><td class="posts column-posts" data-colname="Count">0</a></td></tr>	
+<tr><th scope="row"><input type="checkbox" name="delete_tags[]" value="329" id="cb-select-329"></th><td class="thumb column-thumb" data-colname="Image"><img src="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product" alt="Thumbnail" height="48" width="48"></td><td data-colname="Name"><strong><a class="row-title" aria-label="“Hats” (Edit)">— Hats</a></strong><br><div class="hidden" id="inline_329"><div class="name">Hats</div><div class="slug">hats</div><div class="parent">326</div></div><div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “Hats” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="delete">Delete</a> | </span><span class="view">View</a> | </span><span class="make_default">Make default</a></span></div></td><td class="description column-description" data-colname="Description"><p>benies, baseball hats, and knitted hats for all seasons</p></td><td class="slug column-slug" data-colname="Slug">hats</td><td class="posts column-posts" data-colname="Count">1</a></td></tr>	</tbody>
+
+	<tfoot>
+	<tr>
+		<td class="manage-column column-cb check-column"><input id="cb-select-all-2" type="checkbox">
+			</td><th scope="col" class="manage-column column-thumb">Image</th><th scope="col" class="manage-column column-name column-primary sorted asc" aria-sort="ascending" abbr="Name"><span>Name</span></a></th><th scope="col" class="manage-column column-description sortable desc" abbr="Description"><span>Description</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" class="manage-column column-slug sortable desc" abbr="Slug"><span>Slug</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" class="manage-column column-posts num sortable desc" abbr="Count"><span>Count</span><span class="screen-reader-text">Sort ascending.</span></a></th><th scope="col" class="manage-column column-handle" style="display: table-cell;"></th>	</tr>
+	</tfoot>
+
+</table>
+			<div class="tablenav bottom">
+
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label><select name="action2" id="bulk-action-selector-bottom">
+<option value="-1">Bulk actions</option>
+	<option value="delete">Delete</option>
+</select>
+<input type="submit" name="bulk_action" id="doaction2" class="button action" value="Apply">
+		</div>
+			<div class="tablenav-pages"><span class="displaying-num">27 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
+<span class="screen-reader-text">Current Page</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">1 of <span class="total-pages">2</span></span></span>
+<a class="next-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
+<a class="last-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
+		<br class="clear">
+	</div>
+		
+</form>
+
+		<div class="form-wrap edit-term-notes">
+			<p>
+				<strong>Note:</strong><br>
+				Deleting a category does not delete the products in that category. Instead, products that were only assigned to the deleted category are set to the category <strong>Uncategorized</strong>.			</p>
+		</div>
+		</div>
+</div><!-- /col-right -->
+
+</div><!-- /col-container -->
+
+</div><div><div class="woocommerce-embedded-layout__primary" id="woocommerce-embedded-layout__primary"></div></div><!-- /wrap -->
+		<form method="get">
+		<table style="display: none"><tbody id="inlineedit">
+
+			<tr id="inline-edit" class="inline-edit-row" style="display: none">
+			<td colspan="7" class="colspanchange">
+			<div class="inline-edit-wrapper">
+
+			<fieldset>
+				<legend class="inline-edit-legend">Quick Edit</legend>
+				<div class="inline-edit-col">
+				<label>
+					<span class="title">Name</span>
+					<span class="input-text-wrap"><input type="text" name="name" class="ptitle" value=""></span>
+				</label>
+
+				<label>
+					<span class="title">Slug</span>
+					<span class="input-text-wrap"><input type="text" name="slug" class="ptitle" value=""></span>
+				</label>
+				</div>
+			</fieldset>
+
+			
+			<div class="inline-edit-save submit">
+				<button type="button" class="save button button-primary">Update category</button>
+				<button type="button" class="cancel button">Cancel</button>
+				<span class="spinner"></span>
+
+				<input type="hidden" id="_inline_edit" name="_inline_edit" value="1c34c23199">				<input type="hidden" name="taxonomy" value="product_cat">
+				<input type="hidden" name="post_type" value="product">
+
+				<div class="notice notice-error notice-alt inline hidden"><p class="error"></p></div>			</div>
+			</div>
+
+			</td></tr>
+
+		</tbody></table>
+		</form>
+		
+<div class="clear"></div></div><!-- wpbody-content -->
+<div class="clear"></div></div><!-- wpbody -->
+<div class="clear"></div></div><!-- wpcontent -->

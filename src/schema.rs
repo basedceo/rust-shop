@@ -24,11 +24,15 @@ pub struct ProductAttributes {
 //stores categories for products
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ProductCategories {
+    pub parent: String,
     pub name: String,
     pub slug: String,
     //pub terms: Vec<String>,
     //pub terms: Vec<[String; 3]>,
     pub order_by: String,
+    pub description: String,
+    pub display_type: String,
+    pub thumbnail: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

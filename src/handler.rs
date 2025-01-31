@@ -503,8 +503,135 @@ pub async fn create_product_attribute_handler(
     }
 }
 
-////TODO get a function working that can accept product parameters and images
-////TODO images with a space in the name aren't being displayed properly, the src="" ends at the space
+pub async fn create_product_category_handler(
+    State(data): State<Arc<AppState>>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    let mut name = String::new();
+    let mut lvl = String::new();
+    let mut slug = String::new();
+    let mut parent = String::new();
+    let mut description = String::new();
+    let mut display_type = String::new();
+    let mut thumbnail = String::new();
+
+    // Iterate over multipart fields to collect name, slug, parent category, description and image
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        if let Some(field_name) = field.name() {
+            match field_name {
+                "name" => {
+                    name = field.text().await.unwrap();
+                    println!("listing this name {name}");
+                }
+                "slug" => {
+                    slug = field.text().await.unwrap();
+                }
+                "parent" => {
+                    parent = field.text().await.unwrap();
+                    //checks if category has no parent
+                    //let lvlcheck = "-1";
+                    //TODO print the parent for debugging
+                    //if parent == lvlcheck {
+                        //TODO simplify this like on line 545
+                        //let tmplvl = parent.parse::<i32>().unwrap() + 1;
+                        //lvl = tmplvl.to_string();
+                    //}
+                    //else {
+                    //    lvl = parent.clone();
+                    //}
+                }
+                "lvltracker" => {
+                    let tmplvl = field.text().await.unwrap();
+                    lvl = (tmplvl.parse::<i32>().unwrap() + 1).to_string();
+                }
+                "description" => {
+                    description = field.text().await.unwrap();
+                    println!("got here");
+                }
+                "image" => {
+                    // File upload handling
+                    let file_name = field.file_name().unwrap().to_string();
+                    let content_type = field.content_type().unwrap().to_string();
+                    let data = field.bytes().await.unwrap();
+
+                    let Some(file_type) = content_type.split('/').nth(1) else {
+                        return Err((StatusCode::BAD_REQUEST, Json(json!({"error": "Invalid file type"}))));
+                    };
+
+                    //let upload_path = format!("frontend/img/categories/{}", BASE64_STANDARD.encode(&file_name));
+                    thumbnail = format!("frontend/img/categories/{}", BASE64_STANDARD.encode(&file_name));
+                    println!("Uploading file to {:?}", thumbnail);
+                    fs::write(&thumbnail, data).await.unwrap();
+                    //thumbnail = upload_path;
+                    //order_by = field.text().await.unwrap();
+                }
+                _ => {
+                    println!("Unexpected field: {}", field_name);
+                }
+            }
+        }
+    }
+    // Validate that required fields are populated
+    if name.is_empty() || slug.is_empty() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Name, slug, and terms are required fields.",
+        });
+        return Err((StatusCode::BAD_REQUEST, Json(error_response)));
+    }
+
+    // Now insert into the database after fields are collected
+    let query_result = sqlx::query_as!(
+        ProductCategories,
+        "INSERT INTO product_categories (name, slug, parent, description, display_type, lvl, thumbnail) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        name,
+        slug,
+        parent,
+        description,
+        display_type,
+        lvl,
+        thumbnail,
+    )
+    .fetch_one(&data.db)
+    .await;
+    println!("inserted name {name} successfully");
+    println!("inserted slug {slug} successfully");
+    println!("inserted parent {parent} successfully");
+    println!("inserted description {description} successfully");
+    println!("inserted display_type {display_type} successfully");
+    println!("inserted lvl {lvl} successfully");
+    println!("inserted thumbnail {thumbnail} successfully");
+
+    // Handle the result of the database operation
+    match query_result {
+        Ok(note) => {
+            let note_response = json!({"status": "success","data": json!({
+                "note": note
+            })});
+
+            return Ok((StatusCode::CREATED, Json(note_response)));
+        }
+        Err(e) => {
+            if e.to_string()
+                .contains("duplicate key value violates unique constraint")
+            {
+                let error_response = serde_json::json!({
+                    "status": "fail",
+                    "message": "Product with that name already exists",
+                });
+                return Err((StatusCode::CONFLICT, Json(error_response)));
+            }
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({"status": "error","message": format!("{:?}", e)})),
+            ));
+        }
+    }
+
+}
+
+//TODO get a function working that can accept product parameters and images
+//TODO images with a space in the name aren't being displayed properly, the src="" ends at the space
 ///Some of this was written by ChatGPT
 ///creates products
 pub async fn multipart_create_product_handler(

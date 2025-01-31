@@ -1,5 +1,3 @@
--- Add up migration script here
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE
@@ -20,15 +18,86 @@ CREATE TABLE
 CREATE TABLE
   IF NOT EXISTS product_categories (
       id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+      lvl TEXT NOT NULL,
+      parent TEXT NOT NULL,
       name TEXT NOT NULL,
+      description TEXT NOT NULL,
       slug TEXT NOT NULL UNIQUE,
-      order_by TEXT NOT NULL, --how terms will be ordered
+      display_type TEXT NOT NULL, --how terms will be ordered
+      thumbnail VARCHAR(255) NOT NULL, --image uploaded with product category
       created_at TIMESTAMP
       WITH
           TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP
       WITH
           TIME ZONE DEFAULT NOW()
+  );
+
+-- Step 1: Add a count column to the product_categories table
+ALTER TABLE product_categories
+ADD COLUMN count INTEGER NOT NULL DEFAULT 0;
+
+-- Create a function to update count
+CREATE OR REPLACE FUNCTION update_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Increment the count when a product is added
+    IF (TG_OP = 'INSERT') THEN
+        UPDATE product_categories
+        SET count = count + 1
+        WHERE slug = NEW.category;
+    END IF;
+
+    -- Decrement the count when a product is deleted
+    IF (TG_OP = 'DELETE') THEN
+        UPDATE product_categories
+        SET count = count - 1
+        WHERE slug = OLD.category;
+    END IF;
+
+    -- Adjust the count when a product's category is updated
+    IF (TG_OP = 'UPDATE') THEN
+        -- Decrement the old category count
+        UPDATE product_categories
+        SET count = count - 1
+        WHERE slug = OLD.category;
+
+        -- Increment the new category count
+        UPDATE product_categories
+        SET count = count + 1
+        WHERE slug = NEW.category;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creating default "Uncategorized" category
+INSERT INTO product_categories (
+    id,
+    lvl,
+    parent,
+    name,
+    description,
+    slug,
+    display_type,
+    thumbnail,
+    created_at,
+    updated_at,
+    count
+  )
+VALUES (
+    uuid_generate_v4(),                  -- Unique ID for the category
+    '0',                                 -- Level of the category
+    '-1',                                -- Parent ID (indicating no parent)
+    'Uncategorized',                     -- Name of the category
+    '-',                                 -- Description of the category
+    'uncategorized',                     -- Slug for the category
+    'Default',                           -- Display type
+    'frontend/img/categories/woocommerce-placeholder-300x300.png', -- Thumbnail image
+    NOW(),                               -- Created timestamp
+    NOW(),                               -- Updated timestamp
+    0                                    -- Initial product count
   );
 
 CREATE TABLE
@@ -71,3 +140,9 @@ CREATE TABLE
       WITH
           TIME ZONE DEFAULT NOW()
   );
+
+-- Step 3: Create a trigger on the products table
+CREATE TRIGGER product_category_count_trigger
+AFTER INSERT OR DELETE OR UPDATE ON products
+FOR EACH ROW
+EXECUTE FUNCTION update_count();

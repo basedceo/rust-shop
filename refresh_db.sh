@@ -1,4 +1,3 @@
-after modifying the database run
 docker compose down
 docker compose up -d
 sqlx database drop

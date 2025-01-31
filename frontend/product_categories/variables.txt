@@ -1,0 +1,17 @@
+category in categories
+category.id
+category.image
+category.name
+category.slug
+category.count
+category.parent (This should be 0 if it has no parent, otherwise it's the parents id)
+category.level
+sort categories alphabetically
+for category in categories:
+  if category.parent == 0 && category.name != "Uncategorized":
+    <option class="category.lvl" value="270">category.name</option>
+  if category.parent == category.id[-1]
+    <option class="category.lvl" value="270">"category.lvl*&nbsp;&nbsp;&nbsp;category.name"</option>
+    
+  if category.name == "Uncategorized":
+    <option class="category.lvl" value="270">category.name</option>

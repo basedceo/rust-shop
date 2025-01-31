@@ -20,10 +20,15 @@ pub struct ProductAttributes {
 //stores categories for products
 #[derive(Eq, Hash, PartialEq, Clone, Debug, FromRow, Deserialize, Serialize)]
 pub struct ProductCategories {
+    pub lvl: String,
     pub id: Uuid,
+    pub parent: String,
     pub name: String,
     pub slug: String,
-    pub order_by: String,
+    pub description: String,
+    pub display_type: String,
+    pub thumbnail: String,
+    pub count: i32,
     //TODO turn this into a vector of string arrays Vec<[T; N]>
     //pub terms: Vec<[String; 3]>, // New field: vector of arrays, each with 3 strings
     #[serde(rename = "createdAt")]

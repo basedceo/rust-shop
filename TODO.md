@@ -15,6 +15,8 @@ Products
 create CRUD handlers for attributes
 file:///home/kenny/code/frontend/E-commerce/Wordpress/Attributes%20%E2%80%B9%20Based.win%20%E2%80%94%20WordPress.html
 
+Attributes should show up on the multipart_create_product page in the box for Enter the attributes for your product seperated by commas.
+
 Multiple Terms will belong to a specific attribute
 ex: Attribute name = color; terms = ['red', 'blue', 'green', 'orange']
 
