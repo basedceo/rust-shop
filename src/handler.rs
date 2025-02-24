@@ -529,13 +529,13 @@ pub async fn create_product_category_handler(
                 "parent" => {
                     parent = field.text().await.unwrap();
                     //checks if category has no parent
-                    //let lvlcheck = "-1";
+                    let lvlcheck = "-1";
                     //TODO print the parent for debugging
-                    //if parent == lvlcheck {
+                    if parent == lvlcheck {
                         //TODO simplify this like on line 545
-                        //let tmplvl = parent.parse::<i32>().unwrap() + 1;
-                        //lvl = tmplvl.to_string();
-                    //}
+                        let tmplvl = parent.parse::<i32>().unwrap() + 1;
+                        lvl = tmplvl.to_string();
+                    }
                     //else {
                     //    lvl = parent.clone();
                     //}

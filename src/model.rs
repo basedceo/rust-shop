@@ -22,6 +22,7 @@ pub struct ProductAttributes {
 pub struct ProductCategories {
     pub lvl: String,
     pub id: Uuid,
+    pub parent_id: Option<Uuid>,
     pub parent: String,
     pub name: String,
     pub slug: String,

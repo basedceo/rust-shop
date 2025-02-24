@@ -18,6 +18,7 @@ CREATE TABLE
 CREATE TABLE
   IF NOT EXISTS product_categories (
       id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+      parent_id UUID REFERENCES product_categories(id) ON DELETE CASCADE,
       lvl TEXT NOT NULL,
       parent TEXT NOT NULL,
       name TEXT NOT NULL,
