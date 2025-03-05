@@ -41,42 +41,39 @@
 	<label for="parent">Parent category</label>
 		<select name="parent" id="parent" class="postform" aria-describedby="parent-description">
     <option value="-1">None</option>
-<!--TODO this should list all parent categories sorted alphabetically with their child categories sorted alphabetically-->
-  <!--{#{{ categories | sort(attribute="name") }}#}-->
-  {% set sorted_categories = categories | sort(attribute="name") %}
+    {% set sorted_categories = categories | sort(attribute="name") %}
+    
     {# Always show "Uncategorized" first #}
     {% for category in sorted_categories %}
       {% if category.slug == "uncategorized" %}
                 <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
-      {% endif %} 
-  {% endfor %}
-
-  {# Display top-level categories (lvl = 0, excluding "Uncategorized") #}
-  {% for category in sorted_categories %}
-    {% if category.lvl == "0" and category.slug != "uncategorized" %}
-                <option class="level-0" value="{{ category.name }}">{{ category.name }}</option>
-                <div name="lvltracker" style="display: none;" value="{{ category.lvl }}">
-                </div>
-        {# Nested subcategories (children) #}
-        {# Display subcategories dynamically below the parent category #}
-          {% for subcategory in sorted_categories %}
-            {% if subcategory.parent == category.name %}
-                <option class="level-0" value="{{ subcategory.name }}">{{ subcategory.name }}</option>
-                <div name="lvltracker" style="display: none;" value="{{ category.lvl }}">
-                </div>
-                {# Display sub-subcategories recursively if necessary #}
-                  {% for subsubcategory in sorted_categories %}
-                    {% if subsubcategory.parent == subcategory.id %}
-                <option class="level-0" value="{{ subsubcategory.name }}">{{ subsubcategory.name }}</option>
-                <div name="lvltracker" style="display: none;" value="{{ category.lvl }}">
-                </div>
-                    {% endif %}
+      {% endif %}
+    {% endfor %}
+    
+    {# Display top-level categories and their children #}
+    {% for category in sorted_categories %}
+      {% if category.lvl == "0" and category.slug != "uncategorized" %}
+                <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
+                
+                {# Check if this category has children #}
+                {% if category.child_categories %}
+                  <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
+                  {# Get child categories and sort them #}
+                {#  {% set child_cats = [] %} #}
+                {#  {% for child_id in category.child_categories %} #}
+                {#  {% for cat in sorted_categories %} #}
+                {#      {% if cat.id == child_id %} #}
+                {#      {% endif %} #}
+                {#    {% endfor %} #}
+                {#  {% endfor %} #}
+                  
+                  {# Display sorted child categories #}
+                  {% for child in child_cats | sort(attribute="name") %}
+                    <option class="level-1" value="{{ child.id }}">&nbsp;&nbsp;&nbsp;{{ child.name }}</option>
                   {% endfor %}
-            {% endif %}
-          {% endfor %}
-    {% endif %}
-  {% endfor %}
-
+                {% endif %}
+      {% endif %}
+    {% endfor %}
 </select>
 				<p id="parent-description">Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band.</p>
 	</div>
@@ -181,51 +178,9 @@
       <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{category.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
                 <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{category.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
     {% endif %}
-    {# Nested subcategories (children) #}
-    {# Display subcategories dynamically below the parent category #}
-        {% for subcategory in sorted_categories %}
-          {% if subcategory.name != "Subalublub" and subcategory.parent == category.name %}
-          {% set_global row_count = row_count + 1 %}
-          {% if row_count % 2 > 0 %}
-            <tr></tr>
-          {% else %}
-            <tr class="alternate">
-          {% endif %}
-            <th scope="row" class="check-column">
-              <input type="checkbox" name="delete_tags[]" value="subcategory" id="cb-select-270">
-              <label for="cb-select-270"><span class="screen-reader-text">Select {{subcategory.name}}</span></label></th>
-            <td class="thumb column-thumb" data-colname="Image"><img src={{subcategory.thumbnail}} alt="Thumbnail" height="48" width="48"></td>
-            <td data-colname="Name"><strong><a class="row-title" aria-label="“{{subcategory.name}}” (Edit)">— {{subcategory.name}}</a></strong><br><div class="hidden" id="inline_15"><div class="name">{{subcategory.name}}</div><div class="slug">{{subcategory.name}}</div>
-            <!--indicates what category id this is a child of (enter 0 if not a child)-->
-            <div class="parent">0</div></div>
-            <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{subcategory.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
-                <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{subcategory.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{subcategory.slug}}</td><td class="posts column-posts" data-colname="Count">{{subcategory.count}}</a></td></tr>
-              {# Display sub-subcategories recursively if necessary #}
-                {% for subsubcategory in sorted_categories %}
-                  {% if subsubcategory.parent == subcategory.name %}
-                    {% set_global row_count = row_count + 1 %}
-                    {% if row_count % 2 > 0 %}
-                      <tr></tr>
-                    {% else %}
-                      <tr class="alternate">
-                    {% endif %}
-                    <th scope="row" class="check-column">
-                      <input type="checkbox" name="delete_tags[]" value="subsubcategory" id="cb-select-270">
-                      <label for="cb-select-270"><span class="screen-reader-text">Select {{subsubcategory.name}}</span></label></th>
-                    <td class="thumb column-thumb" data-colname="Image"><img src={{subsubcategory.thumbnail}} alt="Thumbnail" height="48" width="48"></td>
-                    <td data-colname="Name"><strong><a class="row-title" aria-label="“{{subsubcategory.name}}” (Edit)">— — {{subsubcategory.name}}</a></strong><br><div class="hidden" id="inline_15"><div class="name">{{subsubcategory.name}}</div><div class="slug">{{subsubcategory.name}}</div>
-                    <!--indicates what category id this is a child of (enter 0 if not a child)-->
-                    <div class="parent">0</div></div>
-                    <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{subsubcategory.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
-                <td class="description column-description" data-colname="Description"><span aria-hidden="true">{{subsubcategory.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{subsubcategory.slug}}</td><td class="posts column-posts" data-colname="Count">{{subsubcategory.count}}</a></td></tr>
-                  {% endif %}
-                {% endfor %}
-            {% endif %}
-          {% endfor %}
     {% set_global row_count = row_count + 1 %}
     {% endfor %}
-
-
+              <!--TODO add subcategory listing here-->
               <!--PASTE TEMPLATE CODE ABOVE HERE-->
 </tbody>
 

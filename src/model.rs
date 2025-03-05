@@ -29,7 +29,7 @@ pub struct ProductCategories {
     pub description: String,
     pub display_type: String,
     pub thumbnail: String,
-    pub count: i32,
+    //pub child_categories: Option<Vec<Uuid>>, // Array to store child category IDs
     //TODO turn this into a vector of string arrays Vec<[T; N]>
     //pub terms: Vec<[String; 3]>, // New field: vector of arrays, each with 3 strings
     #[serde(rename = "createdAt")]

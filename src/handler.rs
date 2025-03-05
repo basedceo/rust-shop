@@ -310,6 +310,7 @@ pub async fn product_categories_template(
     }
 
     let categories = query_result.unwrap();
+    println!("all categories are {:?}", categories);
 
     //tera
     let tera = Tera::new("frontend/**/*.html").unwrap();
@@ -412,17 +413,54 @@ pub async fn create_product_terms_handler(
     }
 }
 
-pub async fn create_product_form() -> Html<&'static str> {
-    Html(std::include_str!("../create_product_form.html"))
+pub async fn create_product_template(
+    State(data): State<Arc<AppState>>
+) -> Html<String> {
+
+    let query_result = sqlx::query_as!(
+        ProductCategories,
+        "SELECT * FROM product_categories ORDER by id",
+    )
+    .fetch_all(&data.db)
+    .await;
+
+    if query_result.is_err() {
+        let error_response = serde_json::json!({
+            "status": "fail",
+            "message": "Something bad happened while fetching all product attribute items",
+        });
+        //TODO create function to handle errors
+        //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
+    }
+
+    let categories = query_result.unwrap();
+
+    //tera
+    let tera = Tera::new("frontend/**/*.html").unwrap();
+    let mut context = common_context();
+
+    context.insert("page_title", "Add new Product");
+    context.insert("categories", &categories);
+
+    //Static images used across most pages
+    let static_images = vec!["frontend/static/logo_small.webp", "frontend/static/button.png"];
+    context.insert("static_img", &static_images);
+
+    let output = tera.render("products/create_product_form.html", &context);
+    Html(output.unwrap())
 }
 
-fn print_type_of<T>(_: &T) {
-    println!("{}", std::any::type_name::<T>());
-}
-
-pub async fn create_attribute_form() -> Html<&'static str> {
-    Html(std::include_str!("../frontend/product_attributes/product_attributes.html"))
-}
+//pub async fn create_product_form() -> Html<&'static str> {
+//    Html(std::include_str!("../create_product_form.html"))
+//}
+//
+//fn print_type_of<T>(_: &T) {
+//    println!("{}", std::any::type_name::<T>());
+//}
+//
+//pub async fn create_attribute_form() -> Html<&'static str> {
+//    Html(std::include_str!("../frontend/product_attributes/product_attributes.html"))
+//}
 
 //Create product attributes
 //TODO rename to create_attribute_handler
@@ -514,6 +552,7 @@ pub async fn create_product_category_handler(
     let mut description = String::new();
     let mut display_type = String::new();
     let mut thumbnail = String::new();
+    //let child_categories: Vec<String> = Vec::new();
 
     // Iterate over multipart fields to collect name, slug, parent category, description and image
     while let Some(field) = multipart.next_field().await.unwrap() {

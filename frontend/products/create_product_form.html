@@ -32,12 +32,12 @@
       {# Always show "Uncategorized" first #}
       {% for category in sorted_categories %}
         {% if category.slug == "uncategorized" %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
+            <option value="{{category.name}}">{{category.name}}</option>
         {% endif %}
       {% endfor %}
       {% for category in sorted_categories %}
         {% if category.slug != "uncategorized" %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
+            <option value="{{category.name}}">{{category.name}}</option>
         {% endif %}
       {% endfor %}
           </select>

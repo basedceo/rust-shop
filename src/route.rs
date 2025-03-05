@@ -9,7 +9,7 @@ use tower_http::services::ServeDir;
 
 use crate::{
     handler::{
-        create_product_form, health_checker_handler, multipart_create_product_handler, product_attributes_template, single_product_display, tera_product_handler, create_product_attribute_handler, product_terms_template, create_product_terms_handler, product_categories_template, create_product_category_handler
+        create_product_template, health_checker_handler, multipart_create_product_handler, product_attributes_template, single_product_display, tera_product_handler, create_product_attribute_handler, product_terms_template, create_product_terms_handler, product_categories_template, create_product_category_handler
     },
     AppState,
 };
@@ -20,7 +20,7 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
     //let path = "/frontend/img";
     //let path = "/frontend/static";
     Router::new()
-        .route("/multipart_create_product", get(create_product_form).post(multipart_create_product_handler))
+        .route("/multipart_create_product", get(create_product_template).post(multipart_create_product_handler))
         .route("/categories", get(product_categories_template).post(create_product_category_handler))
         .route("/api/healthchecker", get(health_checker_handler))
         .route("/products", get(tera_product_handler))
