@@ -18,6 +18,7 @@ CREATE TABLE
 CREATE TABLE
   IF NOT EXISTS product_categories (
       id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
+      --TODO figure out if this parent_id is necessary
       parent_id UUID REFERENCES product_categories(id) ON DELETE CASCADE,
       lvl TEXT NOT NULL,
       parent TEXT NOT NULL,
@@ -101,3 +102,22 @@ CREATE TABLE
       WITH
           TIME ZONE DEFAULT NOW()
   );
+
+-- function to update category count when a product is added
+CREATE OR REPLACE FUNCTION update_category_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Increment the count for the category of the new product
+    UPDATE product_categories
+    SET count = count + 1
+    WHERE name = NEW.category;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to call the function after a product is inserted
+CREATE TRIGGER after_product_insert
+AFTER INSERT ON products
+FOR EACH ROW
+EXECUTE FUNCTION update_category_count();

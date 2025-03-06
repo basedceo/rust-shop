@@ -156,7 +156,7 @@
       <!--indicates what category id this is a child of (enter 0 if not a child)-->
       <div class="parent">0</div></div>
       <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{category.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
-                <td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count"></a></td></tr>
+                <td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
     {% endif %}
   {% endfor %}
   {# Display top-level categories (lvl = 0, excluding "Uncategorized") #}
@@ -176,7 +176,7 @@
       <!--indicates what category id this is a child of (enter 0 if not a child)-->
       <div class="parent">0</div></div>
       <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{category.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
-                <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{category.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count"></a></td></tr>
+                <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{category.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
     {% endif %}
     {% set_global row_count = row_count + 1 %}
     {% endfor %}
