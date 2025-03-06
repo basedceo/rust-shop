@@ -26,6 +26,7 @@ CREATE TABLE
       slug TEXT NOT NULL UNIQUE,
       display_type TEXT NOT NULL, --how terms will be ordered
       thumbnail VARCHAR(255) NOT NULL, --image uploaded with product category
+      count INTEGER NOT NULL DEFAULT 0, --count of products in this category
       created_at TIMESTAMP
       WITH
           TIME ZONE DEFAULT NOW(),
