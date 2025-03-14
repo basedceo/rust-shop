@@ -46,33 +46,46 @@
     {# Always show "Uncategorized" first #}
     {% for category in sorted_categories %}
       {% if category.slug == "uncategorized" %}
-                <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
+                <option class="level-0" value="{{category.id}}|{{category.lvl}}">{{ category.name }}</option>
       {% endif %}
     {% endfor %}
     
-    {# Display top-level categories and their children #}
+    {# THIS IS CLAUDE CODE #}
+    {# Helper macro to recursively render categories #}
+    {% macro render_category_and_children(category, level, all_categories) %}
+      <option class="level-{{ level }}" value="{{category.id}}|{{category.lvl}}">
+        {% for i in range(end=level) %}
+          &nbsp;&nbsp;&nbsp;
+        {% endfor %}
+        {{ category.name }}
+      </option>
+      
+      {% if category.child_categories %}
+        {% set children = [] %}
+        {% for child_id in category.child_categories %}
+          {% for cat in all_categories %}
+            {% if cat.id == child_id %}
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+        
+        {% set sorted_children = children | sort(attribute="name") %}
+        {% for child in sorted_children %}
+          {{ self::render_category_and_children(child, level=level+1, all_categories) }}
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+    
+    {# Display top-level categories (lvl=0) and their children #}
+    {% set top_level_categories = [] %}
     {% for category in sorted_categories %}
       {% if category.lvl == "0" and category.slug != "uncategorized" %}
-                <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
-                
-                {# Check if this category has children #}
-                {% if category.child_categories %}
-                  <option class="level-0" value="{{ category.id }}">{{ category.name }}</option>
-                  {# Get child categories and sort them #}
-                {#  {% set child_cats = [] %} #}
-                {#  {% for child_id in category.child_categories %} #}
-                {#  {% for cat in sorted_categories %} #}
-                {#      {% if cat.id == child_id %} #}
-                {#      {% endif %} #}
-                {#    {% endfor %} #}
-                {#  {% endfor %} #}
-                  
-                  {# Display sorted child categories #}
-                  {% for child in child_cats | sort(attribute="name") %}
-                    <option class="level-1" value="{{ child.id }}">&nbsp;&nbsp;&nbsp;{{ child.name }}</option>
-                  {% endfor %}
-                {% endif %}
+        {% set _ = top_level_categories.append(category) %}
       {% endif %}
+    {% endfor %}
+    
+    {% for category in top_level_categories | sort(attribute="name") %}
+      {{ render_category_and_children(category, 0, sorted_categories) }}
     {% endfor %}
 </select>
 				<p id="parent-description">Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band.</p>
@@ -129,8 +142,8 @@
 <span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
 <span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
 <span class="paging-input"><label for="current-page-selector" class="screen-reader-text">Current Page</label><input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="1" aria-describedby="table-paging"><span class="tablenav-paging-text"> of <span class="total-pages">2</span></span></span>
-<a class="next-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
-<a class="last-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
+<a class="next-page button" href=""><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
+<a class="last-page button" href=""><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
 		<br class="clear">
 	</div>
           <!--this is the area on the right-->
@@ -147,7 +160,6 @@
 {% set sorted_categories = categories | sort(attribute="name") %}
   {# Always show "Uncategorized" first #}
   {% for category in sorted_categories %}
-  <!--{#{% if loop.index % 2 > 0 %}#}-->
     {% if category.slug == "uncategorized" %}
       <tr class="alternate">
       <th scope="row"></th>
@@ -159,10 +171,14 @@
                 <td class="description column-description" data-colname="Description"><span aria-hidden="true">—</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
     {% endif %}
   {% endfor %}
+
   {# Display top-level categories (lvl = 0, excluding "Uncategorized") #}
-  {% set_global row_count = 1 %}
+  {% set_global lvl_tracker = 0 %}
+  {% set_global row_count = 0 %}
   {% for category in sorted_categories %}
-    {% if category.lvl == "0" and category.slug != "uncategorized" %}
+    {% set catLvl = category.lvl | int %}
+    {% if catLvl == lvl_tracker and category.slug != "uncategorized" %}
+      {% set_global row_count = row_count + 1 %}
       {% if row_count % 2 > 0 %}
         <tr></tr>
       {% else %}
@@ -177,10 +193,36 @@
       <div class="parent">0</div></div>
       <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{category.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
                 <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{category.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
+      {# Check if this category has children #}
+      {% if category.child_categories | length > 0 %}
+        {# TODO Find a better way to do this without nested for loops #}
+        {% for child in category.child_categories %}
+          {% for category in sorted_categories %}
+            {% if category.id == child %}
+                  <!--THIS IS HERE-->
+              {% set_global row_count = row_count + 1 %}
+              {% if row_count % 2 > 0 %}
+                <tr></tr>
+              {% else %}
+                <tr class="alternate">
+              {% endif %}
+              <th scope="row" class="check-column">
+                      <input type="checkbox" name="delete_tags[]" value="{{ category.lvl }}" id="cb-select-270">
+            <label for="cb-select-270"><span class="screen-reader-text">Select {{category.name}}</span></label></th>
+          <td class="thumb column-thumb" data-colname="Image"><img src={{category.thumbnail}} alt="Thumbnail" height="48" width="48"></td>
+          <td data-colname="Name"><strong><a class="row-title" aria-label="“{{category.name}}” (Edit)">{{category.name}}</a></strong><br><div class="hidden" id="inline_15"><div class="name">{{category.name}}</div><div class="slug">{{category.name}}</div>
+          <!--indicates what category id this is a child of (enter 0 if not a child)-->
+          <div class="parent">0</div></div>
+          <div class="row-actions"><span class="edit">Edit</a> | </span><span class="inline hide-if-no-js"><button type="button" aria-label="Quick edit “{{category.name}}” inline" aria-expanded="false">Quick&nbsp;Edit</button> | </span><span class="view">View</a></span></div></td>
+                    <td class="description column-description" data-colname="Description"><span aria-hidden="false">{{category.description}}</span><span class="screen-reader-text">No description</span></td><td class="slug column-slug" data-colname="Slug">{{category.slug}}</td><td class="posts column-posts" data-colname="Count">{{category.count}}</a></td></tr>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
     {% endif %}
-    {% set_global row_count = row_count + 1 %}
-    {% endfor %}
-              <!--TODO add subcategory listing here-->
+        <!--THIS IS HERE-->
+    {% set_global lvl_tracker = lvl_tracker + 1 %}
+  {% endfor %}
               <!--PASTE TEMPLATE CODE ABOVE HERE-->
 </tbody>
 
@@ -204,8 +246,8 @@
 <span class="pagination-links"><span class="tablenav-pages-navspan button disabled" aria-hidden="true">«</span>
 <span class="tablenav-pages-navspan button disabled" aria-hidden="true">‹</span>
 <span class="screen-reader-text">Current Page</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">1 of <span class="total-pages">2</span></span></span>
-<a class="next-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
-<a class="last-page button" href="https://based.win/wp-admin/edit-tags.php?taxonomy=product_cat&amp;post_type=product&amp;paged=2"><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
+<a class="next-page button" href=""><span class="screen-reader-text">Next page</span><span aria-hidden="true">›</span></a>
+<a class="last-page button" href=""><span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span></a></span></div>
 		<br class="clear">
 	</div>
 		

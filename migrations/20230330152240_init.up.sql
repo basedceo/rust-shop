@@ -121,3 +121,88 @@ CREATE TRIGGER after_product_insert
 AFTER INSERT ON products
 FOR EACH ROW
 EXECUTE FUNCTION update_category_count();
+
+-- Add child_categories column to product_categories table
+ALTER TABLE product_categories
+ADD COLUMN child_categories UUID[] DEFAULT '{}';
+
+-- Create function to update parent's child_categories array when a new category is added
+CREATE OR REPLACE FUNCTION update_parent_child_categories()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Skip if parent is -1 (root category)
+    IF NEW.parent = '-1' THEN
+        RETURN NEW;
+    END IF;
+    
+    -- Try to parse parent as UUID and update the parent's child_categories array
+    BEGIN
+        -- Find the parent category by UUID and update its child_categories array
+        UPDATE product_categories
+        SET child_categories = array_append(COALESCE(child_categories, '{}'::uuid[]), NEW.id)
+        WHERE id::text = NEW.parent;
+        
+        -- If no rows were updated, the parent might be specified by another identifier
+        IF NOT FOUND THEN
+            -- Try to find parent by name
+            UPDATE product_categories
+            SET child_categories = array_append(COALESCE(child_categories, '{}'::uuid[]), NEW.id)
+            WHERE name = NEW.parent;
+        END IF;
+    EXCEPTION WHEN OTHERS THEN
+        -- If parent is not a valid UUID, try to find it by name
+        UPDATE product_categories
+        SET child_categories = array_append(COALESCE(child_categories, '{}'::uuid[]), NEW.id)
+        WHERE name = NEW.parent;
+    END;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger to call the function after a category is inserted
+CREATE TRIGGER after_category_insert
+AFTER INSERT ON product_categories
+FOR EACH ROW
+EXECUTE FUNCTION update_parent_child_categories();
+
+-- Create function to update parent's child_categories array when a category is deleted
+CREATE OR REPLACE FUNCTION remove_from_parent_child_categories()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Skip if parent is -1 (root category)
+    IF OLD.parent = '-1' THEN
+        RETURN OLD;
+    END IF;
+    
+    -- Try to parse parent as UUID and update the parent's child_categories array
+    BEGIN
+        -- Find the parent category by UUID and update its child_categories array
+        UPDATE product_categories
+        SET child_categories = array_remove(child_categories, OLD.id)
+        WHERE id::text = OLD.parent;
+        
+        -- If no rows were updated, the parent might be specified by another identifier
+        IF NOT FOUND THEN
+            -- Try to find parent by name
+            UPDATE product_categories
+            SET child_categories = array_remove(child_categories, OLD.id)
+            WHERE name = OLD.parent;
+        END IF;
+    EXCEPTION WHEN OTHERS THEN
+        -- If parent is not a valid UUID, try to find it by name
+        UPDATE product_categories
+        SET child_categories = array_remove(child_categories, OLD.id)
+        WHERE name = OLD.parent;
+    END;
+    
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger to call the function before a category is deleted
+CREATE TRIGGER before_category_delete
+BEFORE DELETE ON product_categories
+FOR EACH ROW
+EXECUTE FUNCTION remove_from_parent_child_categories();
+

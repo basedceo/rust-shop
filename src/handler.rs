@@ -303,7 +303,7 @@ pub async fn product_categories_template(
     if query_result.is_err() {
         let error_response = serde_json::json!({
             "status": "fail",
-            "message": "Something bad happened while fetching all product attribute items",
+            "message": "Something bad happened while fetching all product categories",
         });
         //TODO create function to handle errors
         //return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(error_response)));
@@ -566,26 +566,37 @@ pub async fn create_product_category_handler(
                     slug = field.text().await.unwrap();
                 }
                 "parent" => {
-                    parent = field.text().await.unwrap();
-                    //checks if category has no parent
-                    let lvlcheck = "-1";
-                    //TODO print the parent for debugging
-                    if parent == lvlcheck {
+                    //parent = field.text().await.unwrap();
+                    //let fullfield: Vec<&str> = field.text().await.unwrap().split("|").collect();
+                    let fullfield = field.text().await.unwrap();
+                    if fullfield == "-1" {
                         //TODO simplify this like on line 545
-                        let tmplvl = parent.parse::<i32>().unwrap() + 1;
+                        let tmplvl = fullfield.parse::<i32>().unwrap() + 1;
                         lvl = tmplvl.to_string();
                     }
-                    //else {
-                    //    lvl = parent.clone();
-                    //}
-                }
-                "lvltracker" => {
-                    let tmplvl = field.text().await.unwrap();
-                    lvl = (tmplvl.parse::<i32>().unwrap() + 1).to_string();
+                    else {
+                        let splitter: Vec<&str> = fullfield.split("|").collect();
+                        //sets lvl to 0 if there's no parent category
+                        //let lvlcheck = "-1";
+                        //if parent == lvlcheck {
+                        println!("THIS IS fullfield: {}", fullfield);
+                        println!("THIS IS A PROBLEM: {}", splitter[0].to_string());
+                        parent = splitter[0].to_string();
+                        let tmplvl = splitter[1].parse::<i32>().unwrap();
+                        lvl = (tmplvl + 1).to_string();
+                        //lvl = (splitter[1]).to_string();
+                        //println!("This is the second part of splitter: {}", splitter[1].to_string());
+                        //TODO figure this out
+                        //lvl should be the parents lvl + 1
+                        //parent will = the UUID of the parent category
+                        //lookup parent with UUID then find parent category and set lvl to +1?
+                        //else {
+                        //    lvl = parent.clone();
+                        //}
+                    }
                 }
                 "description" => {
                     description = field.text().await.unwrap();
-                    println!("got here");
                 }
                 "image" => {
                     // File upload handling

@@ -1,49 +1,106 @@
-Unit Struct I'm getting from accept_form()
+    {# Display top-level categories and their children #}
+    {% set_global lvl_tracker = 0 %}
+    {% for category in sorted_categories %}
+      {% set catLvl = category.lvl | int %}
+      {% if catLvl == lvl_tracker and category.slug != "uncategorized" %}
+        <option class="level-0" value="{{category.id}}|{{category.lvl}}">{{ category.name }}</option>
+      {{ catLvl }}
+        
+        {# Check if this category has children #}
+        {% if category.child_categories | length > 0 %}
+          {# TODO Find a better way to do this without nested for loops #}
+          {% for child in category.child_categories %}
 
-This is our body CreateNoteSchema { title: "kenny", content: "this is a test note", category: Some("test"), published: None }
-rust_axum_postgres_api::schema::CreateNoteSchema
-Title= "kenny"
-alloc::string::String
-Content= "this is a test note"
-alloc::string::String
-Category= "test"
-alloc::string::String
-Published= None
-core::option::Option<bool>
-
-JSON I'm getting from create_note_handler()
-
-rust_axum_postgres_api::schema::CreateNoteSchema
-Title= "This is a new note"
-alloc::string::String
-Content= "This is the 'content' of our new note"
-alloc::string::String
-Category= "testcategory"
-alloc::string::String
-Published= None
-core::option::Option<bool>
+            {% for category in sorted_categories %}
+              {% if category.id == child %}
+              {# Inside first child category #}
+                <option class="level-0" value="{{category.id}}|{{category.lvl}}">
+                {% for i in range(end=catLvl) %}
+                  &nbsp;&nbsp;&nbsp;
+                {% endfor %}
+                {{ category.name }}
+                </option>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
 
-  <p>{% for product in products %}
-  <li>{{loop.index0}}. {{product.id}}</li>
-  <li>{{loop.index0}}. {{product.title}}</li>
-  <li>{{loop.index0}}. {{product.description}}</li>
-  <li>{{loop.index0}}. {{product.category}}</li>
-  <li>{{loop.index0}}. {{product.price}}</li>
-  <li>{{loop.index0}}. {{product.sku}}</li>
-  <li>{{loop.index0}}. {{product.product_type}}</li>
-  <li>{{loop.index0}}. {{product.stock}}</li>
-  <li>{{loop.index0}}. {{product.allow_backorders}}</li>
-  <li>{{loop.index0}}. {{product.low_stock_threshold}}</li>
-  <li>{{loop.index0}}. {{product.shipping_weight}}</li>
-  <li><img src={{product.product_gallery}} alt="product image"></li>
-  <!--<li><img id="product-image" src="{{images[loop.index0]}}" alt="product image"></li>-->
-  <li>{{loop.index0}}. {{product.attributes}}</li>
-  <li>{{loop.index0}}. {{product.variations}}</li>
-  <li>{{loop.index0}}. {{product.shipping_dimensions}}</li>
-  <li>{{loop.index0}}. {{product.shipping_class}}</li>
-  <li>{{loop.index0}}. {{product.tax_status}}</li>
-  <li>{{loop.index0}}. {{product.tax_class}}</li>
-  <li>{{loop.index0}}. {{product.published}}</li>
-      {% endfor %}</p>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sub Sub test is missing
+Test is missing because lvl_tracker get's incremented after uncategorized
+
+
+all categories are [
+ProductCategories { lvl: "0", id: 2f1d49a1-93bc-4751-a935-1fea0a786332, parent_id: None, parent: "-1", name: "Uncategorized", slug: "uncategorized", description: "-", display_type: "Default", thumbnail: "frontend/img/categories/woocommerce-placeholder-300x300.png", count: 0, child_categories: Some([]), created_at: Some(2025-03-11T19:23:47.669073Z), updated_at: Some(2025-03-11T19:23:47.669073Z) }, 
+ProductCategories { lvl: "0", id: a94f5baa-9055-446f-9bb1-45eb4e72ac97, parent_id: None, parent: "", name: "Test", slug: "test", description: "This is a test category", display_type: "", thumbnail: "frontend/img/categories/OTg0NDIgLSBTb3lCb29ydS5wbmc=", count: 0, child_categories: Some([4c88f95f-0bbb-41e2-a882-4d13c65fc9c6]), created_at: Some(2025-03-11T19:24:17.159108Z), updated_at: Some(2025-03-11T19:24:17.159108Z) }, 
+ProductCategories { lvl: "1", id: 4c88f95f-0bbb-41e2-a882-4d13c65fc9c6, parent_id: None, parent: "a94f5baa-9055-446f-9bb1-45eb4e72ac97", name: "Sub Test", slug: "subtest", description: "This is a test subcategory", display_type: "", thumbnail: "frontend/img/categories/c3ViMS5qcGc=", count: 0, child_categories: Some([c6cdb5ca-39aa-4a06-a81f-192aecdb8313]), created_at: Some(2025-03-11T19:28:59.451556Z), updated_at: Some(2025-03-11T19:28:59.451556Z) }, 
+ProductCategories { lvl: "2", id: c6cdb5ca-39aa-4a06-a81f-192aecdb8313, parent_id: None, parent: "4c88f95f-0bbb-41e2-a882-4d13c65fc9c6", name: "Sub Sub test", slug: "subalublub", description: "This is a test subsubcategory", display_type: "", thumbnail: "frontend/img/categories/c3ViMi5qcGc=", count: 0, child_categories: Some([]), created_at: Some(2025-03-11T19:29:30.292930Z), updated_at: Some(2025-03-11T19:29:30.292930Z) }
+]
+
+
+
+
+
+
+                      {% if category.id == child %}
+                        {% set spaces = category.lvl | int %}
+                        <option 
+                          class="level-{{ category.lvl }}" 
+                          value="{{ category.id }}|{{ category.lvl }}">
+                          {% for i in range(end=spaces) %}
+                            &nbsp;&nbsp;&nbsp;
+                          {% endfor %}
+                          {{ category.name }}
+                        </option>
+
+
+
+
+
+
+    {# Always show "Uncategorized" first #}
+    {% for category in sorted_categories %}
+      {% if category.slug == "uncategorized" %}
+                <option class="level-0" value="{{category.id}}|{{category.lvl}}">{{ category.name }}</option>
+      {% endif %}
+    {% endfor %}
+    
+    {# Display top-level categories and their children #}
+    {% for category in sorted_categories %}
+                {# {% if category.parent == "" and category.slug != "uncategorized" %}#}
+      {% if category.slug != "uncategorized" %}
+                <option class="level-0" value="{{ category.id }}|{{category.lvl}}">{{ category.name }}</option>
+                {# Check if this category has children #}
+                {% if category.child_categories | length > 0 %}
+                  {# TODO Find a better way to do this without nested for loops #}
+                  {% for child in category.child_categories %}
+                    {% for category in sorted_categories %}
+                      {% if category.id == child %}
+                        <option class="level-{{category.lvl}}" value="{{ category.id }}|{{category.lvl}}">{{ category.name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                {% endif %}
+      {% endif %}
+    {% endfor %}
